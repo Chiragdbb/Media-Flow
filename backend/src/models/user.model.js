@@ -25,7 +25,7 @@ const userSchema = new Schema(
             lowercase: true,
             trim: true,
         },
-        fullName: {
+        fullname: {
             type: String,
             required: true,
             trim: true,
@@ -50,7 +50,7 @@ const userSchema = new Schema(
     { timestamps: true }
 );
 
-// don't use arrow fn. as "this" is required here
+// encrypting password before saving in db (don't use arrow fn. as "this" keyword is used here)
 userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
 

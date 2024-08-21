@@ -1,17 +1,7 @@
-// const asyncHandler = (requestHandler) => async (req, res, next) => {
-//     try {
-//         await requestHandler(req, res, next);
-//     } catch (e) {
-//         res.status(e.code || 500).json({
-//             success: false,
-//             message: e.message,
-//         });
-//     }
-// };
-
 const asyncHandler = (requestHandler) => {
     return (req, res, next) => {
-        Promise.resolve(requestHandler(req, res, next)).catch((e) => next(e));
+        // when an argument is passed in next(), it triggers the error handling middleware
+        Promise.resolve(requestHandler(req, res, next)).catch((e) => next(e)); 
     };
 };
 
