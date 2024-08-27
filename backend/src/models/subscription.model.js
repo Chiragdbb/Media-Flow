@@ -7,6 +7,7 @@ const subscriptionSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: "User",
         },
+        // channel is made by a user
         // one to whom subscriber is subscribing
         channel: {
             type: Schema.Types.ObjectId,
