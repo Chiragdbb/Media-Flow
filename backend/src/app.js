@@ -17,9 +17,11 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 // routes import
-import userRouter from './routes/user.routes.js'
+import userRouter from "./routes/user.routes.js";
+import healthcheck from "./controllers/healthcheck.controller.js";
 
 // routes declaration
-app.use("/api/v1/users", userRouter)
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/heathcheck", healthcheck);
 
 export default app;
