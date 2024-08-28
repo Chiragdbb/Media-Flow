@@ -478,9 +478,8 @@ const getWatchHistory = asyncHandler(async (req, res) => {
     // aggregate pipeline code does not involve mongoose
     const user = await User.aggregate([
         {
-            // check if working without new keyword
             $match: {
-                _id: new mongoose.Types.ObjectId(req.user._id),
+                _id: new mongoose.Types.ObjectId(req.user?._id),
             },
         },
         {
