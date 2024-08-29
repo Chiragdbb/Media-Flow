@@ -3,6 +3,7 @@ import { Tweet } from "../models/tweet.model.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
+import { Like } from "../models/like.model.js";
 
 const createTweet = asyncHandler(async (req, res) => {
     const { content } = req.body;
@@ -86,6 +87,13 @@ const deleteTweet = asyncHandler(async (req, res) => {
     const tweet = await Tweet.findByIdAndDelete(tweetId);
 
     if (!tweet) {
+        throw new ApiError(500, "Error while deleting tweet");
+    }
+
+    // delete likes related to this tweet
+    const deletedLikes = await Like.deleteMany(tweetId);
+
+    if (!deletedLikes) {
         throw new ApiError(500, "Error while deleting tweet");
     }
 

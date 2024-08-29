@@ -1,17 +1,25 @@
-import mongoose, { isValidObjectId } from "mongoose";
 import { Like } from "../models/like.model.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
+import { Comment } from "../models/comment.model.js";
+import { Video } from "../models/video.model.js";
+import { Tweet } from "../models/tweet.model.js";
 
-// toggle = add or remove the objectId of that entity from this Like model
-
+// check if ids exit or not before liking
 const toggleVideoLike = asyncHandler(async (req, res) => {
     const { videoId } = req.params;
     const userId = req.user?._id;
 
     if (!videoId || !userId) {
         throw new ApiError(400, "Video and user id required");
+    }
+
+    //check video exits or not
+    const videoExists = await Video.exists({ _id: videoId });
+
+    if (!videoExists) {
+        throw new ApiError(400, "Video Id is invalid");
     }
 
     const isLiked = await Like.findOne({ video: videoId });
@@ -37,7 +45,6 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
     }
 });
 
-// todo: check later
 const toggleCommentLike = asyncHandler(async (req, res) => {
     const { commentId } = req.params;
 
@@ -45,6 +52,13 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
 
     if (!commentId || !userId) {
         throw new ApiError(400, "Video and user id required");
+    }
+
+    //check comment exits or not
+    const commentExists = await Comment.exists({ _id: commentId });
+
+    if (!commentExists) {
+        throw new ApiError(400, "Comment Id is invalid");
     }
 
     const isLiked = await Like.findOne({ comment: commentId });
@@ -74,6 +88,13 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
 
     if (!tweetId || !userId) {
         throw new ApiError(400, "Video and user id required");
+    }
+
+    //check tweet exits or not
+    const tweetExists = await Tweet.exists({ _id: tweetId });
+
+    if (!tweetExists) {
+        throw new ApiError(400, "Tweet Id is invalid");
     }
 
     const isLiked = await Like.findOne({ tweet: tweetId });

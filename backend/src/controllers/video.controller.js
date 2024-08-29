@@ -7,6 +7,9 @@ import {
     deleteVideoFromCloudinary,
     uploadOnCloudinary,
 } from "../utils/cloudinary.js";
+import { Comment } from "../models/comment.model.js";
+import { Playlist } from "../models/playlist.model.js";
+import { Like } from "../models/like.model.js";
 
 const getAllVideos = asyncHandler(async (req, res) => {
     const {
@@ -202,6 +205,42 @@ const deleteVideo = asyncHandler(async (req, res) => {
     }
 
     const deletedVideo = await deleteVideoFromCloudinary(video.videoFile);
+
+    // Delete all related comments
+    const deletedComments = await Comment.deleteMany({ video: videoId });
+
+    if (!deletedComments) {
+        throw new ApiError(
+            500,
+            "Error while deleting comments related to Video"
+        );
+    }
+
+    // Remove the video from all playlists
+    const deletedPlaylistVideo = await Playlist.updateMany(
+        { videos: videoId },
+        {
+            $pull: {
+                videos: videoId,
+            },
+        }
+    );
+
+    if (!deletedPlaylistVideo) {
+        throw new ApiError(
+            500,
+            "Error while removing deleted video from playlists"
+        );
+    }
+    // Delete all likes related to this video
+    const deletedLikes = await Like.deleteMany({ video: videoId });
+
+    if (!deletedLikes) {
+        throw new ApiError(
+            500,
+            "Error while removing likes related to deleted Video"
+        );
+    }
 
     if (!deleteVideo) {
         throw new ApiError(400, "Error while deleting video from cloudinary");
