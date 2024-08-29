@@ -21,11 +21,13 @@ import userRouter from "./routes/user.routes.js";
 import healthcheck from "./controllers/healthcheck.controller.js";
 import videoRouter from "./routes/video.routes.js";
 import playlistRouter from "./routes/playlist.routes.js";
+import tweetRouter from "./routes/tweet.routes.js";
 
 // routes declaration
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/healthcheck", healthcheck);
 app.use("/api/v1/videos", videoRouter);
 app.use("/api/v1/playlist", playlistRouter);
+app.use("/api/v1/tweets", tweetRouter);
 
 export default app;
