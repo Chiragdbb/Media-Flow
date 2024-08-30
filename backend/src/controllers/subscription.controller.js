@@ -24,8 +24,6 @@ const toggleSubscriptionToChannel = asyncHandler(async (req, res) => {
         subscriber: req.user?._id,
     });
 
-    console.log("Sub status: ", subscriptionStatus, "\nChannel id:", channelId);
-
     if (!subscriptionStatus) {
         const subscribe = await Subscription.create({
             subscriber: req.user?._id,
@@ -40,9 +38,7 @@ const toggleSubscriptionToChannel = asyncHandler(async (req, res) => {
             .status(200)
             .json(new ApiResponse(200, subscribe, "Subscribed successfully"));
     } else {
-        const unsubscribe = await Subscription.deleteOne({
-            _id: subscriptionStatus._id,
-        });
+        const unsubscribe = await Subscription.deleteOne(subscriptionStatus._id);
 
         if (!unsubscribe) {
             throw new ApiError(500, "Error while unsubscribing from channel");

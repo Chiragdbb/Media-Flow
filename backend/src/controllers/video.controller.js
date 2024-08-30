@@ -11,6 +11,7 @@ import { Comment } from "../models/comment.model.js";
 import { Playlist } from "../models/playlist.model.js";
 import { Like } from "../models/like.model.js";
 
+// todo: check if we need to remove all the unpublished videos
 const getAllVideos = asyncHandler(async (req, res) => {
     const {
         page = 1,
@@ -256,7 +257,7 @@ const deleteVideo = asyncHandler(async (req, res) => {
 const togglePublishStatus = asyncHandler(async (req, res) => {
     const { videoId } = req.params;
 
-    let video = await Video.findByIdAndUpdate(videoId);
+    let video = await Video.findById(videoId);
 
     if (!video) {
         throw new ApiError(400, "video not found");
@@ -264,7 +265,34 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
 
     video.isPublished = !video.isPublished;
 
-    video = await video.save();
+    video = await video.save({ validateBeforeSave: false });
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                video,
+                "Video publish status toggled successfully"
+            )
+        );
+});
+
+// add Views
+const addView = asyncHandler(async (req, res) => {
+    const { videoId } = req.params;
+
+    let video = await Video.findByIdAndUpdate(
+        videoId,
+        {
+            $inc: { views: 1 },
+        },
+        { new: true, runValidators: false }
+    );
+
+    if (!video) {
+        throw new ApiError(400, "error while adding view to video");
+    }
 
     return res
         .status(200)
@@ -284,4 +312,5 @@ export {
     getVideoById,
     updateVideo,
     deleteVideo,
+    addView,
 };

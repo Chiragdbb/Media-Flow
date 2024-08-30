@@ -435,8 +435,8 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
                 },
                 isSubscribed: {
                     $cond: {
-                        // performed lookin in an object?
-                        // user added in req using jwt middleware, ($field in User.object key)
+                        // performed looking in an object?
+                        // [(user added in req using jwt middleware), ($field in User.object key)]
                         if: { $in: [req.user?._id, "$subscribers.subscriber"] },
                         then: true,
                         else: false,
