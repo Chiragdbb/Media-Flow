@@ -360,7 +360,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
             "Error while uploading cover image on cloudinary!"
         );
     }
-    
+
     const prevUser = await User.findById(req.user?._id);
     const prevCoverImageUrl = prevUser.coverImage;
 
@@ -375,8 +375,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
     ).select("-password");
 
     // delete previous cover image from cloudinary
-    const deletionResponse =
-        await deleteImageFromCloudinary(prevCoverImageUrl);
+    const deletionResponse = await deleteImageFromCloudinary(prevCoverImageUrl);
 
     return res
         .status(200)
@@ -532,6 +531,74 @@ const getWatchHistory = asyncHandler(async (req, res) => {
         );
 });
 
+const addVideoToWatchHistory = asyncHandler(async (req, res) => {
+    const { videoId } = req.params;
+
+    if (!videoId) {
+        throw new ApiError(400, "Video Id is required");
+    }
+
+    const updatedWatchHistory = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            // unique videos only in watch history
+            $addToSet: {
+                watchHistory: videoId,
+            },
+        },
+        { new: true }
+    );
+
+    if (!updatedWatchHistory) {
+        throw new ApiError(500, "Error while adding video to watch history");
+    }
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                updatedWatchHistory,
+                "Video added to watch history successfully"
+            )
+        );
+});
+
+const removeVideoFromWatchHistory = asyncHandler(async (req, res) => {
+    const { videoId } = req.params;
+
+    if (!videoId) {
+        throw new ApiError(400, "Video Id is required");
+    }
+
+    const updatedWatchHistory = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $pull: {
+                watchHistory: videoId,
+            },
+        },
+        { new: true }
+    );
+
+    if (!updatedWatchHistory) {
+        throw new ApiError(
+            500,
+            "Error while removing video from watch history"
+        );
+    }
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                updatedWatchHistory,
+                "Video removed from watch history successfully"
+            )
+        );
+});
+
 export {
     registerUser,
     loginUser,
@@ -544,4 +611,6 @@ export {
     updateUserCoverImage,
     getUserChannelProfile,
     getWatchHistory,
+    addVideoToWatchHistory,
+    removeVideoFromWatchHistory,
 };
