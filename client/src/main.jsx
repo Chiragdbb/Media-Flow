@@ -1,6 +1,9 @@
 import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
+import { Provider } from "react-redux";
+import store from "./store/store.js";
+import {Toaster} from "react-hot-toast";
 import {
     createBrowserRouter,
     createRoutesFromElements,
@@ -17,7 +20,6 @@ import VideoPage from "./pages/VideoPage.jsx";
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<App />}>
-
             {/* protected route */}
             <Route path="" element={<RootLayout />}>
                 <Route path="" element={<HomeFeed />} />
@@ -35,7 +37,8 @@ const router = createBrowserRouter(
 );
 
 createRoot(document.getElementById("root")).render(
-    <RouterProvider router={router}>
-        <App />
-    </RouterProvider>
+    <Provider store={store}>
+        <RouterProvider router={router} />
+        <Toaster />
+    </Provider>
 );

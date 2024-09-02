@@ -1,50 +1,65 @@
 import { useState } from "react";
-import logo from "../assets/temp/asset-6.svg";
+import logo from "../assets/asset-6.svg";
 import eye from "../assets/eye.svg";
 import closedEye from "../assets/eye-closed.svg";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { startSession } from "../store/userSlice";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
     const url = import.meta.env.VITE_SERVER_URL;
     const navigate = useNavigate();
 
+    const dispatch = useDispatch();
     const [formData, setFormData] = useState({
         email: "",
         password: "",
         username: "",
     });
-    const [data, setData] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-
-    // check details
-    // error for wrong info  &&  user not found
-    // navigate to homepage if correct`
 
     const login = async (formData) => {
         try {
+            const loadToast = toast.loading("Signing in user...");
+
             const res = await axios.post(
                 `${url}/users/login`,
                 formData,
-                {
-                    withCredentials: true,
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
+                { withCredentials: true },
+                { headers: { "Content-Type": "application/json" } }
             );
+            const userData = res.data.data;
 
-            if (res.status === 200) {
-                // navigate("/")
+            // todo: production remove
+            console.log("User data:", userData);
+
+            if (res.status === 200 && userData) {
+                setErr("");
+
+                toast.remove(loadToast);
+                toast.success("Logged in Successfully!! Redirecting...");
+
+                setTimeout(() => {
+                    toast.remove();
+                    // todo: change to feed
+                    navigate("/");
+                }, 2000);
+
+                dispatch(
+                    startSession({
+                        accessToken: userData.accessToken,
+                        userData: userData.user,
+                    })
+                );
             }
-
-            console.log(res.data);
-            setData(res.data);
         } catch (e) {
+            toast.remove();
+            e.response.data.message
+                ? toast.error(e.response.data.message)
+                : toast.error("Error while logging in user!!");
             console.log(`${e.response.status}: ${e.response.data.message}`);
         }
     };
@@ -70,15 +85,15 @@ const LoginPage = () => {
 
         login(updatedFormData);
 
-        // setFormData({
-        //     email: "",
-        //     password: "",
-        //     username: "",
-        // });
+        setFormData({
+            email: "",
+            password: "",
+            username: "",
+        });
     };
 
     return (
-        <div className="h-screen overflow-hidden bg-[#121212] text-white flex flex-col pt-14">
+        <div className="h-screen overflow-hidden bg-dark-bg text-white flex flex-col pt-14">
             <div className="mx-auto w-[15rem]">
                 <img className="w-full aspect-square" src={logo} alt="logo" />
             </div>
@@ -136,7 +151,6 @@ const LoginPage = () => {
                         </div>
                     </div>
                 </label>
-                {/* // todo: loading for signin and success later */}
                 <button className="bg-[hsl(263,100%,64%)] mt-2.5 px-4 py-3  hover:bg-[hsl(263,100%,58%)] rounded-lg">
                     Sign in
                 </button>
