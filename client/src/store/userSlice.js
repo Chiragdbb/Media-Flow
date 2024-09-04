@@ -17,8 +17,8 @@ const userSlice = createSlice({
         },
         endSession: (state) => {
             state.loggedIn = false;
-            state.accessToken = null;
-            state.userData = null;
+            state.accessToken = "";
+            state.userData = {};
         },
         updateSession: (state, action) => {
             // todo: accessToken updated after updating user data?
