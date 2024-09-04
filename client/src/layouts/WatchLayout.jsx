@@ -1,11 +1,12 @@
 import Header from "../components/Header";
-import VideoPage from "../pages/VideoPage";
+import WatchVideo from "../pages/WatchVideo";
 
 const WatchLayout = () => {
     return (
         <div className="watchLayout">
             <Header />
-            <VideoPage />
+            <WatchVideo />
+            {/* add videos list here page */}
         </div>
     );
 };

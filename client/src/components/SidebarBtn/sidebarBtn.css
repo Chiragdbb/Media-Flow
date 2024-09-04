@@ -1,0 +1,35 @@
+.side-btn {
+    border: 1px solid white;
+    background-color: transparent;
+    padding-inline: 1rem;
+    padding-block: 0.4rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 0.75rem;
+    cursor: pointer;
+
+    img{
+        height: 1.25rem;
+    }
+
+    &:hover {
+        border: 1px solid white;
+        background-color: rgb(192 132 252);
+        color: black;
+
+        img {
+            filter: invert(1);
+        }
+    }
+
+    &.active {
+        border: 1px solid rgb(192 132 252);
+        background-color: rgb(192 132 252);
+        color: black;
+
+        img {
+            filter: invert(1);
+        }
+    }
+}

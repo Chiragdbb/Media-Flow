@@ -4,13 +4,13 @@ import Sidebar from "../components/Sidebar";
 
 const RootLayout = () => {
     return (
-        <div className="w-screen h-screen overflow-hidden bg-dark-bg text-white">
+        <div className="w-screen h-screen overflow-x-hidden  bg-dark-bg text-white">
             <Header />
-            <div className="flex">
+            <div className="flex overflow-x-hidden">
                 <div className="flex-[0.17] h-[88vh] border-r">
                     <Sidebar />
                 </div>
-                <div className="flex-[0.7]">
+                <div className="flex-[0.83] h-[88vh] overflow-y-auto">
                     <Outlet />
                 </div>
             </div>

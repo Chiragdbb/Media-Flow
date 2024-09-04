@@ -69,7 +69,7 @@ const RegisterPage = () => {
                 setTimeout(() => {
                     toast.remove();
                     navigate("/login");
-                }, 2000);
+                }, 500);
             }
         } catch (e) {
             setLoading(false);
@@ -219,7 +219,7 @@ const RegisterPage = () => {
                         </div>
                     </label>
                     <label className="mt-6 border-2 border-dashed h-fit flex justify-center items-center text-gray-300 py-12">
-                        {/* // todo: show image when selected */}
+                        {/* // todo: show image file when selected */}
                         <div className="flex flex-col justify-center items-center">
                             <div className="rounded-full bg-gray-200 p-6">
                                 <img

@@ -1,26 +1,21 @@
-import { useEffect, useState } from "react";
 import logo from "../assets/asset-1.svg";
 import search from "../assets/search.svg";
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+import Logout from "./logout";
 
 const Header = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
-
-    // todo: login and logout 
-    // todo: user avatar on login and 
-    // todo: search api, 
-
-    useEffect(() => {
-        // check login status from store
-    }, []);
+    let { loggedIn, userData } = useSelector((state) => state.user);
 
     const submitHandler = (e) => {
         e.preventDefault();
+        // todo: show videos with user query title
+        // ? videos feed for search or resuse home feed 
     };
 
     return (
-        <header className="h-[5.25rem] pt-2 pb-1 px-4 pl-0.5 bg-dark-bg flex justify-between items-center text-white border-b border-white">
+        <header className="h-[12vh] pt-2 pb-1 pr-5 pl-0.5 bg-dark-bg flex justify-between items-center text-white border-b border-white">
             <div
                 onClick={() => navigate("/")}
                 className="h-full w-fit cursor-pointer"
@@ -40,18 +35,22 @@ const Header = () => {
                         type="text"
                         name="search"
                         id="search"
+                        autoComplete="off"
                         placeholder="Search"
                     />
                 </form>
             </div>
-            {isLoggedIn ? (
-                <div className="w-12 h-12 rounded-full overflow-hidden">
-                    {/* user avatar */}
-                    <img
-                        className="w-full h-full aspect-square"
-                        src={avatar}
-                        alt="avatar"
-                    />
+            {loggedIn ? (
+                <div className="flex justify-center items-center gap-x-5">
+                    <Logout />
+                    <div className="w-12 h-12 rounded-full flex justify-center items-center overflow-hidden">
+                        {/* logout btn */}
+                        <img
+                            className="h-full object-cover object-center"
+                            src={userData.avatar}
+                            alt="avatar"
+                        />
+                    </div>
                 </div>
             ) : (
                 <div className="">
