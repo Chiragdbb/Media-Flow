@@ -36,6 +36,36 @@ const getAllVideos = asyncHandler(async (req, res) => {
         {
             $match: { owner: new mongoose.Types.ObjectId(userId) },
         },
+        {
+            $lookup: {
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "owner",
+            },
+        },
+        {
+            // unwind to access owner fields
+            $unwind: "$owner",
+        },
+        {
+            $project: {
+                _id: 1,
+                videoFile: 1,
+                thumbnail: 1,
+                title: 1,
+                description: 1,
+                duration: 1,
+                views: 1,
+                isPublished: 1,
+                createdAt:1,
+                updatedAt:1,
+
+                "owner._id": 1,
+                "owner.username": 1,
+                "owner.avatar": 1,
+            },
+        },
     ];
 
     // add query in pipeline if provided

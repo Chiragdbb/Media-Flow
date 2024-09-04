@@ -23,6 +23,7 @@ const LoginPage = () => {
 
     const login = async (formData) => {
         try {
+            toast.remove();
             const loadToast = toast.loading("Signing in user...");
 
             const res = await axios.post(
@@ -33,20 +34,14 @@ const LoginPage = () => {
             );
             const userData = res.data.data;
 
-            // todo: production remove
-            console.log("User data:", userData);
-
-            if (res.status === 200 && userData) {
-                setErr("");
-
+            if (res.data.statusCode === 200 && userData) {
                 toast.remove(loadToast);
                 toast.success("Logged in Successfully!! Redirecting...");
 
                 setTimeout(() => {
                     toast.remove();
-                    // todo: change to feed
                     navigate("/");
-                }, 2000);
+                }, 500);
 
                 dispatch(
                     startSession({
@@ -111,7 +106,7 @@ const LoginPage = () => {
                             value={formData.email}
                             onChange={changeHandler}
                             placeholder="Enter your email or username"
-                            className="outline-none mt-0.5 w-full rounded-lg border bg-transparent px-3 py-2"
+                            className="outline-none mt-0.5 w-full  border bg-transparent px-3 py-2"
                             required
                             autoComplete="off"
                         />
@@ -119,7 +114,7 @@ const LoginPage = () => {
                 </label>
                 <label className="text-gray-300">
                     Password*
-                    <div className="flex mt-0.5 w-full rounded-lg border items-center justify-center ">
+                    <div className="flex mt-0.5 w-full  border items-center justify-center ">
                         <input
                             name="password"
                             id="password"
@@ -151,7 +146,7 @@ const LoginPage = () => {
                         </div>
                     </div>
                 </label>
-                <button className="bg-[hsl(263,100%,64%)] mt-2.5 px-4 py-3  hover:bg-[hsl(263,100%,58%)] rounded-lg">
+                <button className="bg-[hsl(263,100%,64%)] mt-2.5 px-4 py-3 hover:bg-[hsl(263,100%,58%)] ">
                     Sign in
                 </button>
             </form>
