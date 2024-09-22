@@ -1,5 +1,5 @@
 import axios from "axios";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const VideoCard = ({ video }) => {
     // todo: add view on video
@@ -47,7 +47,6 @@ const VideoCard = ({ video }) => {
     }
 
     const addView = async () => {
-        // send request to add view
         try {
             await axios.patch(
                 `${import.meta.env.VITE_SERVER_URL}/videos/view/${video._id}`,
@@ -63,12 +62,12 @@ const VideoCard = ({ video }) => {
     const videoDuration = formatTime(video.duration);
 
     return (
-        <NavLink 
+        <Link 
         to={`/watch/${video._id}`} 
         onClick={addView}
         className="w-fit h-fit"
         >
-            <div className="w-[26rem] h-[20rem] p-3.5 pb-1 rounded-xl overflow-hidden hover:bg-black/60 transition-colors duration-200">
+            <div className="w-[26rem] h-[20rem] p-3.5 pb-1 rounded-xl overflow-hidden hover:bg-black/60 transition-colors duration-150">
                 {/* video */}
                 <div className="relative h-[70%] w-full">
                     <img
@@ -108,7 +107,7 @@ const VideoCard = ({ video }) => {
                     </div>
                 </div>
             </div>
-        </NavLink>
+        </Link>
     );
 };
 

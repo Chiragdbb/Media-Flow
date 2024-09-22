@@ -58,8 +58,8 @@ const getAllVideos = asyncHandler(async (req, res) => {
                 duration: 1,
                 views: 1,
                 isPublished: 1,
-                createdAt:1,
-                updatedAt:1,
+                createdAt: 1,
+                updatedAt: 1,
 
                 "owner._id": 1,
                 "owner.username": 1,
@@ -143,7 +143,12 @@ const getVideoById = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Video id is required");
     }
 
-    const video = await Video.findById(videoId);
+    const video = await Video.findById(videoId)
+        .populate({
+            path: "owner",
+            select: "-password -refreshToken -watchHistory -fullname -email -coverImage",
+        })
+        .exec();
 
     if (!video) {
         throw new ApiError(400, "Video id is invalid");

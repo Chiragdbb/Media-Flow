@@ -30,9 +30,7 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
 
         return res
             .status(200)
-            .json(
-                new ApiResponse(200, "Removed Video Like Successfully")
-            );
+            .json(new ApiResponse(200, "Removed Video Like Successfully"));
     } else {
         // create document with videoId to add like
         const like = await Like.create({
@@ -68,9 +66,7 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
 
         return res
             .status(200)
-            .json(
-                new ApiResponse(200, "Removed Comment Like Successfully")
-            );
+            .json(new ApiResponse(200, "Removed Comment Like Successfully"));
     } else {
         const like = await Like.create({
             comment: commentId,
@@ -104,9 +100,7 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
 
         return res
             .status(200)
-            .json(
-                new ApiResponse(200, "Removed Tweet Like Successfully")
-            );
+            .json(new ApiResponse(200, "Removed Tweet Like Successfully"));
     } else {
         const like = await Like.create({
             tweet: tweetId,
@@ -129,6 +123,7 @@ const getLikedVideos = asyncHandler(async (req, res) => {
         {
             $match: {
                 likedBy: userId,
+                video: { $exists: true, $ne: null }, // only get docs with video field in it
             },
         },
         {
@@ -137,6 +132,13 @@ const getLikedVideos = asyncHandler(async (req, res) => {
                 localField: "video",
                 foreignField: "_id",
                 as: "video",
+            },
+        },
+        {
+            $project: {
+                video: 1,
+                _id: 1,
+                likedBy: 1,
             },
         },
     ]);

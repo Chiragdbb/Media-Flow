@@ -7,10 +7,10 @@ const RootLayout = () => {
         <div className="w-screen h-screen overflow-x-hidden  bg-dark-bg text-white">
             <Header />
             <div className="flex overflow-x-hidden">
-                <div className="flex-[0.17] h-[88vh] border-r">
+                <div className="flex-[0.16] h-[88vh]">
                     <Sidebar />
                 </div>
-                <div className="flex-[0.83] h-[88vh] overflow-y-auto">
+                <div className="flex-[0.84] h-[88vh] overflow-y-auto">
                     <Outlet />
                 </div>
             </div>

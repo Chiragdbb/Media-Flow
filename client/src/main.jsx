@@ -22,7 +22,6 @@ import MyContent from "./components/MyContent.jsx";
 import Settings from "./components/Settings.jsx";
 import Subscribers from "./components/Subscribers.jsx";
 import Support from "./components/Support.jsx";
-import WatchVideo from "./pages/WatchVideo.jsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -45,7 +44,7 @@ const router = createBrowserRouter(
 
             {/* protected route */}
             <Route path="/watch/:videoId" element={<WatchLayout />}>
-                <Route path="" element={<WatchVideo />} />
+                {/* <Route path="" element={<WatchVideo />} /> */}
             </Route>
 
             <Route path="/register" element={<RegisterPage />} />
