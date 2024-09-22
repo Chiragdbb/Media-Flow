@@ -1,10 +1,13 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import VideoCard from "../components/VideoCard";
+import axios from "axios";
+import VideoListCard from "../components/VideoListCard";
+import { useLocation } from "react-router";
 
-// todo pagination handling and scoller
-const HomeFeed = () => {
+// todo: show videos of current channel first and then rest of videos
+const VideoList = () => {
+    const url = useLocation().pathname;
+
     const [videos, setVideos] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -19,7 +22,6 @@ const HomeFeed = () => {
         limit,
     };
 
-    // ? pagination or infinite scroll
     const getVideos = async () => {
         try {
             const res = await axios.get(
@@ -31,8 +33,6 @@ const HomeFeed = () => {
             );
 
             const allVideos = res.data.data.docs;
-
-            console.log(allVideos);
 
             if (res.status === 200 && allVideos) {
                 setVideos(allVideos);
@@ -50,24 +50,27 @@ const HomeFeed = () => {
 
     useEffect(() => {
         getVideos();
-    }, [page, limit]);
+    }, [page, limit, url]);
 
     return (
-        <div className="w-full pb-5 px-3">
-            {/* create a screen component for loading */}
-            <div className="">
-                {loading ? (
-                    "Loading..."
-                ) : (
-                    <div className="w-full grid grid-cols-3 place-items-center gap-y-4">
-                        {videos.map((video) => (
-                            <VideoCard key={video._id} video={video} />
-                        ))}
-                    </div>
-                )}
-            </div>
+        <div className="px-2 py-2 h-full">
+            {loading ? (
+                "Loading..."
+            ) : (
+                <div className="grid grid-cols-1 gap-y-1">
+                    {videos
+                        .filter((video) => url.split("/").at(-1) !== video._id)
+                        .map((video) => {
+                            return (
+                                <div key={video._id}>
+                                    <VideoListCard video={video} />
+                                </div>
+                            );
+                        })}
+                </div>
+            )}
         </div>
     );
 };
 
-export default HomeFeed;
+export default VideoList;
