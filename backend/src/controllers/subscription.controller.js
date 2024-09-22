@@ -38,7 +38,9 @@ const toggleSubscriptionToChannel = asyncHandler(async (req, res) => {
             .status(200)
             .json(new ApiResponse(200, subscribe, "Subscribed successfully"));
     } else {
-        const unsubscribe = await Subscription.deleteOne(subscriptionStatus._id);
+        const unsubscribe = await Subscription.deleteOne(
+            subscriptionStatus._id
+        );
 
         if (!unsubscribe) {
             throw new ApiError(500, "Error while unsubscribing from channel");
@@ -50,4 +52,31 @@ const toggleSubscriptionToChannel = asyncHandler(async (req, res) => {
     }
 });
 
-export { toggleSubscriptionToChannel };
+const totalChannelSubscribers = async (req, res) => {
+    const { channelId } = req.params;
+
+    if (!channelId) {
+        throw new ApiError(400, "Channel Id required");
+    }
+
+    const totalSubs = await Subscription.find({ channel: new mongoose.Types.ObjectId(channelId) });
+
+    if (!totalSubs) {
+        throw new ApiError(
+            500,
+            "Error while fetching total subscribers of channel"
+        );
+    }
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                totalSubs,
+                "fetched total subscribers successfully"
+            )
+        );
+};
+
+export { toggleSubscriptionToChannel, totalChannelSubscribers };
