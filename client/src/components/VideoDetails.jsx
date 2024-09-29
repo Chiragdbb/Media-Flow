@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import liked from "../assets/liked.svg";
-import like from "../assets/like.svg";
-import save from "../assets/save.svg";
-import saved from "../assets/saved.svg";
 import axios from "axios";
+import Subscribe from "./Subscribe";
+import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import Like from "./Like";
+import Save from "./Save";
 
 const VideoDetails = ({ videoId }) => {
-    // get all userChannel and other details
+    const userId = useSelector((state) => state.user.userData._id);
 
     const [video, setVideo] = useState({});
     const [channelSubs, setChannelSubs] = useState([]);
     const [descExpanded, setDescExpanded] = useState(false);
-    const [videoLiked, setVideoLiked] = useState(false);
-    const [videoSaved, setVideoSaved] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [initialSubStatus, setInitialSubStatus] = useState(false);
 
     function timeSince(date) {
         const now = new Date();
@@ -49,25 +49,22 @@ const VideoDetails = ({ videoId }) => {
                 }
             );
             const videoData = res.data.data;
-            console.log(videoData)
 
             if (res.status === 200 && videoData) {
                 setVideo(videoData);
+                document.title = videoData.title + " - Nexus Point";
                 getChannelSubs(videoData.owner._id);
             }
         } catch (e) {
             console.log("Error fetching video details:", e);
-            // e.response.data.message ? toast.error(e.response.data.message) : toast.error("Error fetching video details");
+            e.response.data.message
+                ? toast.error(e.response.data.message)
+                : toast.error("Error fetching video details");
             console.log(`${e.response.status}: ${e.response.data.message}`);
         } finally {
             setLoading(false);
         }
     };
-
-    // check if user is subbed
-    // likes on that video
-    // liked or not by user
-    // saved in any playlist or not
 
     const getChannelSubs = async (channelId) => {
         try {
@@ -80,6 +77,11 @@ const VideoDetails = ({ videoId }) => {
 
             if (res.status === 200 && data) {
                 setChannelSubs(data);
+
+                const status = data.some((item) => {
+                    return item.subscriber === userId;
+                });
+                setInitialSubStatus(status);
             }
         } catch (e) {
             console.log("Error while getting total channel subscribers:", e);
@@ -116,39 +118,19 @@ const VideoDetails = ({ videoId }) => {
                                     {video.owner.username}
                                 </span>
                                 <span className="text-xs font-normal text-white/50">
-                                    {/* //todo */}
                                     {channelSubs.length} subscribers
                                 </span>
                             </div>
                             <div className="ml-6">
-                                <button className="bg-white rounded-full text-black/90 px-4 py-2 text-sm">
-                                    {/* //todo */}
-                                    Subscribe
-                                </button>
+                                <Subscribe
+                                    channelId={video.owner._id}
+                                    subStatus={initialSubStatus}
+                                />
                             </div>
                         </div>
                         <div className="flex gap-x-2 mt-1">
-                            {/* //todo check liked and count*/}
-                            <div className="w-fit flex justify-between items-center bg-white/10 rounded-full py-2 gap-x-2 px-4 hover:bg-white/20 cursor-pointer">
-                                <img
-                                    className="w-5 mt-0.5 aspect-square"
-                                    src={videoLiked ? liked : like}
-                                    alt="liked"
-                                />
-                                <span>15</span>
-                            </div>
-                            <div className="flex gap-x-4">
-                                <div className="w-fit flex justify-between items-center bg-white/10  py-2 gap-x-2 px-4 rounded-full hover:bg-white/20 cursor-pointer">
-                                    <img
-                                        className="w-5 mt-0.5 aspect-square"
-                                        src={videoSaved ? saved : save}
-                                        alt="liked"
-                                    />
-                                    <span>Save</span>
-                                </div>
-                                {/*// todo: modal, dropdown -> checklist */}
-                                <div hidden>user playlist list</div>
-                            </div>
+                            <Like id={videoId} type={"v"} />
+                            <Save videoId={videoId} />
                         </div>
                     </div>
 

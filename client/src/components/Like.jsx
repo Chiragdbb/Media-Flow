@@ -1,0 +1,97 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import liked from "../assets/liked.svg";
+import like from "../assets/like.svg";
+
+const Like = ({ id, type }) => {
+    const userId = useSelector((state) => state.user.userData._id);
+
+    const [likedByUser, setLikedByUser] = useState(false);
+    const [likeCount, setLikeCount] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [togglingLike, setTogglingLike] = useState(false)
+
+    const getVideoLikes = async (videoId) => {
+        try {
+            const res = await axios.get(
+                `${import.meta.env.VITE_SERVER_URL}/likes/v/${videoId}`,
+                {
+                    withCredentials: true,
+                }
+            );
+
+            const data = res.data.data;
+
+            const isLiked = data.some((item) => {
+                if (item.likedBy === userId) return true;
+            });
+
+            if (res.status === 200 && data) {
+                setLikeCount(data.length);
+                setLikedByUser(isLiked);
+            }
+        } catch (e) {
+            console.log("Error while getting video likes", e);
+            console.log(`${e.response.status}: ${e.response.data.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const toggleVideoLike = async () => {
+        try {
+            setTogglingLike(true);
+            
+            const res = await axios.post(
+                `${import.meta.env.VITE_SERVER_URL}/likes/toggle/${type}/${id}`,
+                null,
+                {
+                    withCredentials: true,
+                }
+            );
+
+            const data = res.data.data;
+
+            if (res.status === 200 && data) {
+                data._id ? setLikedByUser(true) : setLikedByUser(false);
+            } else {
+                setLikedByUser(false);
+            }
+        } catch (e) {
+            console.log("Error while toggling video like", e);
+            console.log(`${e.response.status}: ${e.response.data.message}`);
+            setLikedByUser(false);
+        } finally {
+            setTogglingLike(false);
+        }
+    };
+
+    useEffect(() => {
+        getVideoLikes(id);
+    }, [id, likedByUser]);
+
+    return (
+        <>
+            {loading ? (
+                <span className="w-fit bg-white/10 rounded-full py-2 px-4 text-xs flex items-center">
+                    Loading...
+                </span>
+            ) : (
+                <div
+                    onClick={toggleVideoLike}
+                    className={`${togglingLike? "pointer-events-none brightness-75" : "pointer-events-auto"} w-fit flex justify-between items-center bg-white/10 rounded-full py-2 gap-x-2 px-4 hover:bg-white/20 cursor-pointer`}
+                >
+                    <img
+                        className="w-5 mt-0.5 aspect-square"
+                        src={likedByUser ? liked : like}
+                        alt="like"
+                    />
+                    <span>{likeCount}</span>
+                </div>
+            )}
+        </>
+    );
+};
+
+export default Like;

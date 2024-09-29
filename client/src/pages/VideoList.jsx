@@ -25,7 +25,7 @@ const VideoList = () => {
     const getVideos = async () => {
         try {
             const res = await axios.get(
-                `${import.meta.env.VITE_SERVER_URL}/videos`,
+                `${import.meta.env.VITE_SERVER_URL}/videos/all`,
                 {
                     params,
                     withCredentials: true,
@@ -52,6 +52,24 @@ const VideoList = () => {
         getVideos();
     }, [page, limit, url]);
 
+    const addToWatchHistory = async (videoId) => {
+        try {
+            await axios.patch(
+                `${import.meta.env.VITE_SERVER_URL}/users/history/add/${videoId}`,
+                null,
+                {
+                    withCredentials: true,
+                }
+            );
+        } catch (e) {
+            console.log(e);
+            e.response.data.message
+                ? toast.error(e.response.data.message)
+                : toast.error("Error while adding video to watch histroy!!");
+            console.log(`${e.response.status}: ${e.response.data.message}`);
+        }
+    };
+
     return (
         <div className="px-2 py-2 h-full">
             {loading ? (
@@ -62,7 +80,10 @@ const VideoList = () => {
                         .filter((video) => url.split("/").at(-1) !== video._id)
                         .map((video) => {
                             return (
-                                <div key={video._id}>
+                                <div
+                                    key={video._id}
+                                    onClick={() => addToWatchHistory(video._id)}
+                                >
                                     <VideoListCard video={video} />
                                 </div>
                             );

@@ -2,9 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import VideoCard from "../components/VideoCard";
+import toast from "react-hot-toast";
 
 // todo pagination handling and scoller
+//todo: update history in redux
 const HomeFeed = () => {
+    document.title = "Nexus Point";
+
     const [videos, setVideos] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -19,11 +23,11 @@ const HomeFeed = () => {
         limit,
     };
 
-    // ? pagination or infinite scroll
+    // todo: pagination or infinite scroll
     const getVideos = async () => {
         try {
             const res = await axios.get(
-                `${import.meta.env.VITE_SERVER_URL}/videos`,
+                `${import.meta.env.VITE_SERVER_URL}/videos/all`,
                 {
                     params,
                     withCredentials: true,
@@ -32,18 +36,34 @@ const HomeFeed = () => {
 
             const allVideos = res.data.data.docs;
 
-            console.log(allVideos);
-
             if (res.status === 200 && allVideos) {
                 setVideos(allVideos);
-                setLoading(false);
             }
         } catch (e) {
-            setLoading(false);
             console.log(e);
             e.response.data.message
                 ? toast.error(e.response.data.message)
-                : toast.error("Error while logging in user!!");
+                : toast.error("Error while fetching all videos data!!");
+            console.log(`${e.response.status}: ${e.response.data.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const addToWatchHistory = async (videoId) => {
+        try {
+            await axios.patch(
+                `${import.meta.env.VITE_SERVER_URL}/users/history/add/${videoId}`,
+                null,
+                {
+                    withCredentials: true,
+                }
+            );
+        } catch (e) {
+            console.log(e);
+            e.response.data.message
+                ? toast.error(e.response.data.message)
+                : toast.error("Error while adding video to watch histroy!!");
             console.log(`${e.response.status}: ${e.response.data.message}`);
         }
     };
@@ -55,13 +75,16 @@ const HomeFeed = () => {
     return (
         <div className="w-full pb-5 px-3">
             {/* create a screen component for loading */}
-            <div className="">
+            <div>
+                {/* // todo: loading component */}
                 {loading ? (
                     "Loading..."
                 ) : (
                     <div className="w-full grid grid-cols-3 place-items-center gap-y-4">
                         {videos.map((video) => (
-                            <VideoCard key={video._id} video={video} />
+                            <div onClick={() => addToWatchHistory(video._id)}>
+                                <VideoCard key={video._id} video={video} />
+                            </div>
                         ))}
                     </div>
                 )}

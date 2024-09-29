@@ -8,6 +8,7 @@ const Logout = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    // remove from state
     const logout = async () => {
         try {
             const loadToast = toast.loading("Logging out..");
@@ -39,7 +40,7 @@ const Logout = () => {
 
     return (
         <div>
-            <button onClick={logout} className="px-3 py-2 hover:bg-gray-600">
+            <button onClick={logout} className="px-4 py-2 hover:bg-gray-700 rounded-full">
                 Logout
             </button>
         </div>

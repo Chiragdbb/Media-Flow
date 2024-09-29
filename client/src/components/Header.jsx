@@ -22,7 +22,7 @@ const Header = () => {
             >
                 <img className="h-full " src={logo} alt="logo" />
             </div>
-            <div className="border py-2 px-3 w-[25rem]">
+            <div className="border rounded-full py-2 px-3 w-[25rem]">
                 <form
                     className="flex items-center justify-start"
                     onSubmit={submitHandler}
@@ -43,7 +43,7 @@ const Header = () => {
             {loggedIn ? (
                 <div className="flex justify-center items-center gap-x-5">
                     <Logout />
-                    <div className="w-12 h-12 rounded-full flex justify-center items-center overflow-hidden">
+                    <div className="w-11 h-11 rounded-full flex justify-center items-center overflow-hidden">
                         {/* logout btn */}
                         <img
                             className="h-full object-cover object-center"

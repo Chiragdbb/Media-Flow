@@ -1,9 +1,9 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
+import check from "../assets/check.svg";
 
 const VideoCard = ({ video }) => {
-    // todo: add view on video
-    // todo: check
+    // : look in this
     function formatTime(seconds) {
         const hours = Math.floor(seconds / 3600);
         const minutes = Math.floor((seconds % 3600) / 60);
@@ -20,7 +20,7 @@ const VideoCard = ({ video }) => {
         }
     }
 
-    // todo: check
+    // : look in this
     function timeSince(date) {
         const now = new Date();
         const pastDate = new Date(date);
@@ -62,12 +62,12 @@ const VideoCard = ({ video }) => {
     const videoDuration = formatTime(video.duration);
 
     return (
-        <Link 
-        to={`/watch/${video._id}`} 
-        onClick={addView}
-        className="w-fit h-fit"
+        <Link
+            to={`/watch/${video._id}`}
+            onClick={addView}
+            className="w-fit h-fit"
         >
-            <div className="w-[26rem] h-[20rem] p-3.5 pb-1 rounded-xl overflow-hidden hover:bg-black/60 transition-colors duration-150">
+            <div className="w-[26rem] h-[20rem] p-3 pb-1 rounded-xl overflow-hidden hover:bg-black/60 transition-colors duration-150">
                 {/* video */}
                 <div className="relative h-[70%] w-full">
                     <img
@@ -92,10 +92,17 @@ const VideoCard = ({ video }) => {
                     </div>
                     <div className="flex flex-col items-start justify-center">
                         <h3 className="text-lg text-white/80">{video.title}</h3>
-                        <span className="text-gray-500 text-sm">
+                        <span className="text-gray-400 text- flex justify-center items-center gap-x-1.5">
                             {video.owner.username}
+                            <span className="bg-white/80 p-[2px] w-3 h-3 rounded-full flex justify-center items-center">
+                                <img
+                                    className="w-full"
+                                    src={check}
+                                    alt=""
+                                />
+                            </span>
                         </span>
-                        <div className="flex gap-x-2 text-sm text-gray-500">
+                        <div className="flex gap-x-2 text-sm text-gray-400">
                             <span className="">
                                 {video.views}
                                 <span className="ml-1">views</span>

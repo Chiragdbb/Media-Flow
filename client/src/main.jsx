@@ -26,6 +26,7 @@ import Support from "./components/Support.jsx";
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<App />}>
+            {/* protected route */}
             <Route path="" element={<RootLayout />}>
                 <Route path="/" element={<HomeFeed />} />
             </Route>

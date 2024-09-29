@@ -10,9 +10,8 @@ import SidebarBtn from "./SidebarBtn/SidebarBtn";
 
 const Sidebar = () => {
     return (
-        <aside className="h-full flex flex-col justify-between px-2 py-4">
-            <div className="flex flex-col gap-y-2">
-            
+        <aside className="h-full flex flex-col justify-between pl-1.5 py-4">
+            <div className="flex flex-col gap-y-0.5">
                 <SidebarBtn linkTo={"/"} text={"Home"} img={home} />
                 <SidebarBtn
                     linkTo={"/user/liked"}
@@ -40,7 +39,7 @@ const Sidebar = () => {
                     img={subscribers}
                 />
             </div>
-            <div className="flex flex-col gap-y-2">
+            <div className="flex flex-col gap-y-0.5">
                 <SidebarBtn
                     linkTo={"/user/support"}
                     text={"Support"}
