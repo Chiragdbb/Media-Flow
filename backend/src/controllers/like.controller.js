@@ -22,11 +22,11 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Video Id is invalid");
     }
 
-    const isLiked = await Like.findOne({ video: videoId });
+    const isLiked = await Like.findOne({ video: videoId, likedBy: userId });
 
     if (isLiked) {
         // delete document with videoId to remove like
-        const like = await Like.findByIdAndDelete(isLiked._id);
+        await Like.findByIdAndDelete(isLiked._id);
 
         return res
             .status(200)
@@ -59,10 +59,10 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Comment Id is invalid");
     }
 
-    const isLiked = await Like.findOne({ comment: commentId });
+    const isLiked = await Like.findOne({ comment: commentId, likedBy: userId });
 
     if (isLiked) {
-        const like = await Like.findByIdAndDelete(isLiked._id);
+        await Like.findByIdAndDelete(isLiked._id);
 
         return res
             .status(200)
@@ -93,10 +93,10 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Tweet Id is invalid");
     }
 
-    const isLiked = await Like.findOne({ tweet: tweetId });
+    const isLiked = await Like.findOne({ tweet: tweetId, likedBy: userId });
 
     if (isLiked) {
-        const like = await Like.findByIdAndDelete(isLiked._id);
+        await Like.findByIdAndDelete(isLiked._id);
 
         return res
             .status(200)
@@ -112,6 +112,7 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
     }
 });
 
+// pagination
 const getLikedVideos = asyncHandler(async (req, res) => {
     const userId = req.user?._id;
 
@@ -132,13 +133,41 @@ const getLikedVideos = asyncHandler(async (req, res) => {
                 localField: "video",
                 foreignField: "_id",
                 as: "video",
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: "users",
+                            localField: "owner",
+                            foreignField: "_id",
+                            as: "owner",
+                        },
+                    },
+                ],
             },
         },
         {
+            $unwind: "$video",
+        },
+        {
+            $unwind: "$video.owner",
+        },
+        {
             $project: {
-                video: 1,
                 _id: 1,
                 likedBy: 1,
+
+                video: {
+                    $mergeObjects: [
+                        "$video",
+                        {
+                            owner: {
+                                _id: "$video.owner._id",
+                                username: "$video.owner.username",
+                                avatar: "$video.owner.avatar",
+                            },
+                        },
+                    ],
+                },
             },
         },
     ]);
@@ -154,4 +183,47 @@ const getLikedVideos = asyncHandler(async (req, res) => {
         );
 });
 
-export { toggleCommentLike, toggleTweetLike, toggleVideoLike, getLikedVideos };
+const getAllLikes = asyncHandler(async (req, res) => {
+    const { type, id } = req.params;
+
+    if (!(id && type)) {
+        throw new ApiError(400, "type and Id is required");
+    }
+
+    let allLikes;
+
+    if (type === "v") {
+        allLikes = await Like.find({ video: id });
+    } else if (type === "c") {
+        allLikes = await Like.find({ comment: id });
+    } else if (type === "t") {
+        allLikes = await Like.find({ tweet: id });
+    } else {
+        throw new ApiError(400, "Invalid type parameter");
+    }
+
+    if (!allLikes) {
+        throw new ApiError(
+            500,
+            `Error while getting all likes of type: ${type}, Id: ${id}`
+        );
+    }
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                allLikes,
+                "Fetched all likes of Id successfully"
+            )
+        );
+});
+
+export {
+    toggleCommentLike,
+    toggleTweetLike,
+    toggleVideoLike,
+    getLikedVideos,
+    getAllLikes,
+};

@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
     addView,
     deleteVideo,
+    getAllUsersVideos,
     getAllVideos,
     getVideoById,
     publishVideo,
@@ -17,6 +18,7 @@ router.use(verifyJWT);
 
 // todo: remove auth form get all videos
 // other routes remain the same 
+router.route("/all").get(getAllUsersVideos);
 router.route("/").get(getAllVideos);
 router.route("/publish").post(upload.single("video"), publishVideo);
 router.route("/toggle/publish/:videoId").patch(togglePublishStatus);

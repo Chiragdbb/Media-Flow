@@ -12,6 +12,78 @@ import { Playlist } from "../models/playlist.model.js";
 import { Like } from "../models/like.model.js";
 
 // todo: check if we need to remove all the unpublished videos
+const getAllUsersVideos = asyncHandler(async (req, res) => {
+    const {
+        page = 1,
+        limit = 10,
+        sortBy = "createdAt",
+        sortDirec = "desc",
+        } = req.query;
+
+    const options = {
+        page,
+        limit,
+    };
+
+    const aggregatePipeline = [
+        {
+            $lookup: {
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "owner",
+            },
+        },
+        {
+            // unwind to access owner fields
+            $unwind: "$owner",
+        },
+        {
+            $project: {
+                _id: 1,
+                videoFile: 1,
+                thumbnail: 1,
+                title: 1,
+                duration: 1,
+                views: 1,
+                isPublished: 1,
+                createdAt: 1,
+                updatedAt: 1,
+
+                "owner._id": 1,
+                "owner.username": 1,
+                "owner.avatar": 1,
+
+            },
+        },
+    ];
+
+    // sorting
+    aggregatePipeline.push({
+        $sort: {
+            [sortBy]: sortDirec === ("asc" || "ascending") ? 1 : -1,
+        },
+    });
+
+    const allUserVideos = await Video.aggregatePaginate(
+        Video.aggregate(aggregatePipeline),
+        options
+    );
+
+    if (!allUserVideos) {
+        throw new ApiError(
+            400,
+            "Error while aggregating and paginating all users videos"
+        );
+    }
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200, allUserVideos, "All users videos fetched successfully")
+        );
+});
+
 const getAllVideos = asyncHandler(async (req, res) => {
     const {
         page = 1,
@@ -83,12 +155,12 @@ const getAllVideos = asyncHandler(async (req, res) => {
         },
     });
 
-    const AllVideos = await Video.aggregatePaginate(
+    const allVideos = await Video.aggregatePaginate(
         Video.aggregate(aggregatePipeline),
         options
     );
 
-    if (!AllVideos) {
+    if (!allVideos) {
         throw new ApiError(
             400,
             "Error while aggregating and paginating all videos of user"
@@ -98,7 +170,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
     return res
         .status(200)
         .json(
-            new ApiResponse(200, AllVideos, "All videos fetched successfully")
+            new ApiResponse(200, allVideos, "All videos fetched successfully")
         );
 });
 
@@ -341,6 +413,7 @@ const addView = asyncHandler(async (req, res) => {
 });
 
 export {
+    getAllUsersVideos,
     getAllVideos,
     publishVideo,
     togglePublishStatus,
