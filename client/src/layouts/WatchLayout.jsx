@@ -18,7 +18,9 @@ const WatchLayout = () => {
                     <VideoPlayer videoId={videoId}/>
                     <div className="mt-4">
                         <VideoDetails videoId={videoId}/>
-                        <Comments videoId={videoId}/>
+                        <div className="mt-6">
+                            <Comments videoId={videoId}/>
+                        </div>
                     </div>
                 </div>
                 <div className="flex-[0.3]">

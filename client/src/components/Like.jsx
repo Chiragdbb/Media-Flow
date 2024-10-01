@@ -4,18 +4,18 @@ import { useSelector } from "react-redux";
 import liked from "../assets/liked.svg";
 import like from "../assets/like.svg";
 
-const Like = ({ id, type }) => {
+const Like = ({ id, type, addClasses }) => {
     const userId = useSelector((state) => state.user.userData._id);
 
     const [likedByUser, setLikedByUser] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
     const [loading, setLoading] = useState(true);
-    const [togglingLike, setTogglingLike] = useState(false)
+    const [togglingLike, setTogglingLike] = useState(false);
 
     const getVideoLikes = async (videoId) => {
         try {
             const res = await axios.get(
-                `${import.meta.env.VITE_SERVER_URL}/likes/v/${videoId}`,
+                `${import.meta.env.VITE_SERVER_URL}/likes/${type}/${videoId}`,
                 {
                     withCredentials: true,
                 }
@@ -24,7 +24,8 @@ const Like = ({ id, type }) => {
             const data = res.data.data;
 
             const isLiked = data.some((item) => {
-                if (item.likedBy === userId) return true;
+                    if (item.likedBy === userId) return true;
+                // }
             });
 
             if (res.status === 200 && data) {
@@ -42,7 +43,7 @@ const Like = ({ id, type }) => {
     const toggleVideoLike = async () => {
         try {
             setTogglingLike(true);
-            
+
             const res = await axios.post(
                 `${import.meta.env.VITE_SERVER_URL}/likes/toggle/${type}/${id}`,
                 null,
@@ -80,7 +81,7 @@ const Like = ({ id, type }) => {
             ) : (
                 <div
                     onClick={toggleVideoLike}
-                    className={`${togglingLike? "pointer-events-none brightness-75" : "pointer-events-auto"} w-fit flex justify-between items-center bg-white/10 rounded-full py-2 gap-x-2 px-4 hover:bg-white/20 cursor-pointer`}
+                    className={`${togglingLike ? "pointer-events-none brightness-75" : "pointer-events-auto"} w-fit flex justify-between items-end rounded-full gap-x-1.5 cursor-pointer ${addClasses}`}
                 >
                     <img
                         className="w-5 mt-0.5 aspect-square"

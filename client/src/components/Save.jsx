@@ -6,6 +6,7 @@ import plus from "../assets/plus.svg";
 import close from "../assets/close.svg";
 import toast from "react-hot-toast";
 
+// todo: checkbox UI 
 const Save = ({ videoId }) => {
     const userId = useSelector((state) => state.user.userData._id);
 

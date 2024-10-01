@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import Like from "./Like";
 import Save from "./Save";
 
+// todo: update subsribe button UI
 const VideoDetails = ({ videoId }) => {
     const userId = useSelector((state) => state.user.userData._id);
 
@@ -129,7 +130,7 @@ const VideoDetails = ({ videoId }) => {
                             </div>
                         </div>
                         <div className="flex gap-x-2 mt-1">
-                            <Like id={videoId} type={"v"} />
+                            <Like id={videoId} type={"v"} addClasses={"bg-white/10 py-2 gap-x-2 px-4 hover:bg-white/20"}/>
                             <Save videoId={videoId} />
                         </div>
                     </div>
