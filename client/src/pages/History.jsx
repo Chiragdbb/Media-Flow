@@ -1,5 +1,5 @@
 import axios from "axios";
-import VideoCard from "./VideoCard";
+import VideoCard from "../components/VideoCard";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
