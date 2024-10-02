@@ -1,5 +1,5 @@
 import { useState } from "react";
-import logo from "../assets/asset-6.svg";
+import logo from "../assets/logo-2.svg";
 import eye from "../assets/eye.svg";
 import closedEye from "../assets/eye-closed.svg";
 import axios from "axios";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { startSession } from "../store/userSlice";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 const LoginPage = () => {
     const url = import.meta.env.VITE_SERVER_URL;
@@ -88,68 +89,75 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="h-screen overflow-hidden bg-dark-bg text-white flex flex-col pt-14">
-            <div className="mx-auto w-[15rem]">
-                <img className="w-full aspect-square" src={logo} alt="logo" />
-            </div>
-            <form
-                onSubmit={submitHandler}
-                className="mx-auto mt-4 flex w-full max-w-sm flex-col px-4 gap-6"
-            >
-                <label className="block text-gray-300">
-                    Email / Username*
-                    <div>
-                        <input
-                            name="email"
-                            id="email-password"
-                            type="text"
-                            value={formData.email}
-                            onChange={changeHandler}
-                            placeholder="Enter your email or username"
-                            className="outline-none mt-0.5 w-full  border bg-transparent px-3 py-2"
-                            required
-                            autoComplete="off"
-                        />
-                    </div>
-                </label>
-                <label className="text-gray-300">
-                    Password*
-                    <div className="flex mt-0.5 w-full  border items-center justify-center ">
-                        <input
-                            name="password"
-                            id="password"
-                            type={showPassword ? "text" : "password"}
-                            value={formData.password}
-                            onChange={changeHandler}
-                            placeholder="Enter your password"
-                            className=" pl-3 py-2 border-none outline-none flex-1 bg-transparent"
-                            required
-                            autoComplete="off"
-                        />
-                        <div
-                            className="w-8 flex items-center justify-center mr-1 cursor-pointer"
-                            onClick={() => setShowPassword((prev) => !prev)}
-                        >
-                            {!showPassword ? (
-                                <img
-                                    src={closedEye}
-                                    className="h-[22px] aspect-square text-white cursor-pointer"
-                                    alt="eye"
-                                />
-                            ) : (
-                                <img
-                                    src={eye}
-                                    className="h-[20px] aspect-square text-white cursor-pointer ml-[2px]"
-                                    alt="eye"
-                                />
-                            )}
+        <div className="h-screen overflow-hidden bg-dark-bg text-white flex flex-col justify-between pt-14 pb-3">
+            <div>
+                <div className="mx-auto w-[15rem]">
+                    <img className="w-full aspect-square" src={logo} alt="logo" />
+                </div>
+                <form
+                    onSubmit={submitHandler}
+                    className="mx-auto mt-4 flex w-full max-w-sm flex-col px-4 gap-6"
+                >
+                    <label className="block text-gray-300">
+                        Email / Username*
+                            <input
+                                name="email"
+                                id="email-password"
+                                type="text"
+                                value={formData.email}
+                                onChange={changeHandler}
+                                placeholder="Enter your email or username"
+                                className="outline-none mt-0.5 w-full  border rounded-xl bg-transparent px-3 py-2"
+                                required
+                                autoComplete="off"
+                            />
+                    </label>
+                    <label className="text-gray-300">
+                        Password*
+                        <div className="flex mt-0.5 w-full rounded-xl border items-center justify-center ">
+                            <input
+                                name="password"
+                                id="password"
+                                type={showPassword ? "text" : "password"}
+                                value={formData.password}
+                                onChange={changeHandler}
+                                placeholder="Enter your password"
+                                className=" pl-3 py-2 border-none outline-none flex-1 bg-transparent"
+                                required
+                                autoComplete="off"
+                            />
+                            <div
+                                className="w-8 flex items-center justify-center mr-1 cursor-pointer"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                            >
+                                {!showPassword ? (
+                                    <img
+                                        src={closedEye}
+                                        className="h-[22px] aspect-square text-white cursor-pointer"
+                                        alt="eye"
+                                    />
+                                ) : (
+                                    <img
+                                        src={eye}
+                                        className="h-[20px] aspect-square text-white cursor-pointer ml-[2px]"
+                                        alt="eye"
+                                    />
+                                )}
+                            </div>
                         </div>
-                    </div>
-                </label>
-                <button className="bg-[hsl(263,100%,64%)] mt-2.5 px-4 py-3 hover:bg-[hsl(263,100%,58%)] ">
-                    Sign in
-                </button>
-            </form>
+                    </label>
+                    <button className="rounded-xl bg-[hsl(263,100%,64%)] mt-2.5 px-4 py-3 hover:bg-[hsl(263,100%,58%)] ">
+                        Sign in
+                    </button>
+                </form>
+            </div>
+            <div className="mx-auto flex w-full max-w-sm flex-col px-4">
+                <div className="mt-4 text-white/60 text-center">
+                    <span className="text">New to the scene? </span>
+                    <Link to={"/register"} className="ml-1 underline hover:text-purple-500 text-purple-400">Let's get you started
+                    </Link>
+                </div>
+            </div>
         </div>
     );
 };

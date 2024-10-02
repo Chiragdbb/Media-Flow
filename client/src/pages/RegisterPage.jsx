@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
-import logo from "../assets/asset-6.svg";
+import { useState } from "react";
+import logo from "../assets/logo-2.svg";
 import eye from "../assets/eye.svg";
 import upload from "../assets/upload.svg";
 import closedEye from "../assets/eye-closed.svg";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 // todo: check for valid email
 const RegisterPage = () => {
@@ -122,19 +123,21 @@ const RegisterPage = () => {
     };
 
     return (
-        // todo: sticky logo
-        <div className="h-fit overflow-y-auto bg-dark-bg text-white flex pt-24 pb-10 px-12 justify-between ">
+        <div className="h-fit bg-dark-bg text-white flex pt-12 pb-5 px-12 justify-between ">
             <div className="flex-[0.5] flex justify-center items-center relative">
                 <img
-                    className="self-start  w-[30rem] aspect-square sticky top-0"
+                    className="sticky top-20 self-start w-[30rem] aspect-square"
                     src={logo}
                     alt="logo"
                 />
             </div>
             <div className="flex-[0.5] h-fit">
+                <h1 className="mx-auto font-bold w-[60%] text-[2.75rem]">
+                    Create an Account
+                </h1>
                 <form
                     onSubmit={submitHandler}
-                    className="mx-auto w-[60%] flex flex-col gap-y-6"
+                    className="mx-auto w-[60%] flex flex-col gap-y-6 mt-4"
                 >
                     <label className="block text-gray-300">
                         Full Name*
@@ -146,7 +149,7 @@ const RegisterPage = () => {
                                 value={formData.fullname}
                                 onChange={changeHandler}
                                 placeholder="Enter your full name"
-                                className="outline-none mt-0.5 w-full border bg-transparent px-3 py-2"
+                                className="outline-none mt-0.5 w-full border rounded-xl rounded-xl bg-transparent px-3 py-2"
                                 required
                                 autoComplete="off"
                             />
@@ -162,7 +165,7 @@ const RegisterPage = () => {
                                 value={formData.username}
                                 onChange={changeHandler}
                                 placeholder="Enter your username"
-                                className="outline-none mt-0.5 w-full border bg-transparent px-3 py-2"
+                                className="outline-none mt-0.5 w-full border rounded-xl bg-transparent px-3 py-2"
                                 required
                                 autoComplete="off"
                             />
@@ -178,7 +181,7 @@ const RegisterPage = () => {
                                 value={formData.email}
                                 onChange={changeHandler}
                                 placeholder="Enter your email or username"
-                                className="outline-none mt-0.5 w-full border bg-transparent px-3 py-2"
+                                className="outline-none mt-0.5 w-full border rounded-xl bg-transparent px-3 py-2"
                                 required
                                 autoComplete="off"
                             />
@@ -186,7 +189,7 @@ const RegisterPage = () => {
                     </label>
                     <label className="text-gray-300">
                         Password*
-                        <div className="flex mt-0.5 w-full border items-center justify-center ">
+                        <div className="flex mt-0.5 w-full border rounded-xl items-center justify-center ">
                             <input
                                 name="password"
                                 id="password"
@@ -218,7 +221,7 @@ const RegisterPage = () => {
                             </div>
                         </div>
                     </label>
-                    <label className="mt-6 border-2 border-dashed h-fit flex justify-center items-center text-gray-300 py-12">
+                    <label className="mt-6 border-2 rounded-xl border-dashed h-fit flex justify-center items-center text-gray-300 py-12">
                         {/* // todo: show image file when selected */}
                         <div className="flex flex-col justify-center items-center">
                             <div className="rounded-full bg-gray-200 p-6">
@@ -246,7 +249,7 @@ const RegisterPage = () => {
                             hidden
                             onChange={fileChangeHandler}
                             multiple={false}
-                            className="outline-none mt-0.5 w-full border bg-transparent px-3 py-2"
+                            className="outline-none mt-0.5 w-full border rounded-xl bg-transparent px-3 py-2"
                             required
                         />
                     </label>
@@ -259,20 +262,29 @@ const RegisterPage = () => {
                                 type="file"
                                 onChange={fileChangeHandler}
                                 multiple={false}
-                                className="outline-none mt-0.5 w-full border bg-transparent px-3 py-2"
+                                className="outline-none mt-0.5 w-full border rounded-xl bg-transparent px-3 py-2"
                             />
                         </div>
                     </label>
-                    {!loading ? (
-                        <button className="bg-[hsl(263,100%,64%)] mt-2.5 px-4 py-3 hover:bg-[hsl(263,100%,58%)] text-black font-bold">
-                            Register
-                        </button>
-                    ) : (
-                        <div className="bg-gray-500 mt-2.5 px-4 py-3 cursor-not-allowed text-center text-gray-300">
+                    {loading ? (
+                        <div className="bg-gray-500 mt-2.5 px-4 py-3 cursor-not-allowed text-center rounded-xl text-gray-300 font-bold">
                             Registering...
                         </div>
+                    ) : (
+                        <button className="bg-[hsl(263,100%,64%)] mt-2.5 px-4 py-3 hover:bg-[hsl(263,100%,58%)] text-black font-bold rounded-xl ">
+                            Register
+                        </button>
                     )}
                 </form>
+                <div className="mt-6 mx-auto w-[60%] text-center">
+                    <span className="text-white/60">Already have an account?</span>
+                    <Link
+                        className="underline ml-1 text-purple-400 hover:text-purple-500"
+                        to={"/login"}
+                    >
+                        Log in
+                    </Link>
+                </div>
             </div>
         </div>
     );
