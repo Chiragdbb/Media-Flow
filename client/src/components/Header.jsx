@@ -1,4 +1,4 @@
-import logo from "../assets/asset-1.svg";
+import logo from "../assets/logo-1.svg";
 import search from "../assets/search.svg";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";

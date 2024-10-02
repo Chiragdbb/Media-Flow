@@ -16,24 +16,45 @@ import RegisterPage from "./pages/RegisterPage.jsx";
 import HomeFeed from "./pages/HomeFeed.jsx";
 import WatchLayout from "./layouts/WatchLayout.jsx";
 import LikedVideos from "./pages/LikedVideos.jsx";
-import Collections from "./components/Collections.jsx";
-import History from "./components/History.jsx";
-import MyContent from "./components/MyContent.jsx";
-import Settings from "./components/Settings.jsx";
-import Subscribers from "./components/Subscribers.jsx";
-import Support from "./components/Support.jsx";
+import Collections from "./pages/Collections.jsx";
+import History from "./pages/History.jsx";
+import MyContent from "./pages/MyContent.jsx";
+import Settings from "./pages/Settings.jsx";
+import Subscribers from "./pages/Subscribers.jsx";
+import Support from "./pages/Support.jsx";
+import Auth from "./components/Auth.jsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<App />}>
-            {/* protected route */}
-            <Route path="" element={<RootLayout />}>
-                <Route path="/" element={<HomeFeed />} />
-            </Route>
+            {/* open routes */}
+            <Route
+                path="/register"
+                element={
+                    <Auth authentication={false}>
+                        <RegisterPage />
+                    </Auth>
+                }
+            />
+            <Route
+                path="/login"
+                element={
+                    <Auth authentication={false}>
+                        <LoginPage />
+                    </Auth>
+                }
+            />
 
             {/* protected routes */}
-            {/* change user = username later */}
-            <Route path="/user" element={<RootLayout />}>
+            <Route
+                path="/"
+                element={
+                    <Auth authentication>
+                        <RootLayout />
+                    </Auth>
+                }
+            >
+                <Route path="/" element={<HomeFeed />} />
                 <Route path="/user/liked" element={<LikedVideos />} />
                 <Route path="/user/subscribers" element={<Subscribers />} />
                 <Route path="/user/content" element={<MyContent />} />
@@ -43,13 +64,14 @@ const router = createBrowserRouter(
                 <Route path="/user/settings" element={<Settings />} />
             </Route>
 
-            {/* protected route */}
-            <Route path="/watch/:videoId" element={<WatchLayout />}>
-                {/* <Route path="" element={<WatchVideo />} /> */}
-            </Route>
-
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/login" element={<LoginPage />} />
+            <Route
+                path="/watch/:videoId"
+                element={
+                    <Auth authentication={true}>
+                        <WatchLayout />
+                    </Auth>
+                }
+            />
         </Route>
     )
 );

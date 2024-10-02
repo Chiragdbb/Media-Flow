@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import VideoCard from "../components/VideoCard";
 import toast from "react-hot-toast";
+import Loader from "../components/Loader/Loader.jsx";
 
 // todo pagination handling and scoller
 //todo: update history in redux
@@ -73,12 +74,10 @@ const HomeFeed = () => {
     }, [page, limit]);
 
     return (
-        <div className="w-full pb-5 px-3">
-            {/* create a screen component for loading */}
-            <div>
-                {/* // todo: loading component */}
+        <div className="w-full pb-5 px-3 h-full">
+            <div className="h-full">
                 {loading ? (
-                    "Loading..."
+                        <Loader />
                 ) : (
                     <div className="w-full grid grid-cols-3 place-items-center gap-y-4">
                         {videos.map((video) => (
