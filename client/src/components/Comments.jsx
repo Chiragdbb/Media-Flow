@@ -1,13 +1,15 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import Like from "./Like";
 import trash from "../assets/trash.svg";
+import useAxios from "../axios/axios";
 
 // todo: pagination => change params to get next comments
 const Comments = ({ videoId }) => {
     const user = useSelector((state) => state.user.userData);
+
+    const api = useAxios();
 
     const [videoComments, setVideoComments] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -24,13 +26,9 @@ const Comments = ({ videoId }) => {
 
     const getVideoComments = async () => {
         try {
-            const res = await axios.get(
-                `${import.meta.env.VITE_SERVER_URL}/comments/${videoId}`,
-                {
-                    params,
-                    withCredentials: true,
-                }
-            );
+            const res = await api.get(`/comments/${videoId}`, {
+                params,
+            });
 
             const data = res.data.data.docs;
 
@@ -49,15 +47,9 @@ const Comments = ({ videoId }) => {
         try {
             const loadToast = toast.loading("Adding comment...");
 
-            const res = await axios.post(
-                `${import.meta.env.VITE_SERVER_URL}/comments/${videoId}`,
-                {
-                    content: comment,
-                },
-                {
-                    withCredentials: true,
-                }
-            );
+            const res = await api.post(`/comments/${videoId}`, {
+                content: comment,
+            });
 
             if (res.status === 200) {
                 toast.remove(loadToast);
@@ -87,11 +79,8 @@ const Comments = ({ videoId }) => {
         try {
             const loadToast = toast.loading("Deleting comment...");
 
-            const res = await axios.delete(
-                `${import.meta.env.VITE_SERVER_URL}/comments/c/${commentId}`,
-                {
-                    withCredentials: true,
-                }
+            const res = await api.delete(
+                `/comments/c/${commentId}`
             );
 
             if (res.status === 200) {
@@ -141,13 +130,13 @@ const Comments = ({ videoId }) => {
     return (
         <div className="">
             {loading ? (
-                <div>
-                    <span>Loading...</span>
+                <div className="pt-3 text-center text-lg">
+                    <span>Loading comments...</span>
                 </div>
             ) : (
                 <div>
                     <h2 className="text-xl font-bold ">
-                        {videoComments.length} Comments
+                        {videoComments.length} &nbsp;Comments
                     </h2>
                     {/* comment input */}
                     <div className="flex flex-col mt-6 gap-y-1">
@@ -195,7 +184,7 @@ const Comments = ({ videoId }) => {
                             </div>
                         )}
                     </div>
-                    {/* all comments */}
+                    {/* video comments */}
                     <div className="mt-10 grid space-y-4">
                         {videoComments.map((item) => (
                             <div className="flex gap-x-4 w-full" key={item._id}>
@@ -209,7 +198,7 @@ const Comments = ({ videoId }) => {
                                 <div className="w-full">
                                     <div className="flex justify-between items-center">
                                         <div>
-                                            <span className="text-sm font-bold">
+                                            <span className="text-sm font-bold tracking-wide">
                                                 @{item.owner.username}
                                             </span>
                                             <span className="ml-2 text-xs text-white/40">
@@ -223,13 +212,19 @@ const Comments = ({ videoId }) => {
                                                     deleteHandler(item._id)
                                                 }
                                             >
-                                                <img src={trash} alt="delete"/>
+                                                <img src={trash} alt="delete" />
                                             </button>
                                         )}
                                     </div>
                                     <p className="mt-1">{item.content}</p>
                                     <div className="mt-1 text-sm text-white/80 -ml-1">
-                                        <Like id={item._id} type={"c"} addClasses={"px-1.5 py-1 hover:bg-white/20"}/>
+                                        <Like
+                                            id={item._id}
+                                            type={"c"}
+                                            addClasses={
+                                                "px-1.5 py-1 hover:bg-white/20"
+                                            }
+                                        />
                                     </div>
                                 </div>
                             </div>

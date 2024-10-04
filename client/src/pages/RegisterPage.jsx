@@ -1,12 +1,12 @@
+import axios from "axios";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 import logo from "../assets/logo-2.svg";
 import eye from "../assets/eye.svg";
 import upload from "../assets/upload.svg";
 import closedEye from "../assets/eye-closed.svg";
-import axios from "axios";
-import { useNavigate } from "react-router";
-import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
 
 // todo: check for valid email
 const RegisterPage = () => {
@@ -149,7 +149,7 @@ const RegisterPage = () => {
                                 value={formData.fullname}
                                 onChange={changeHandler}
                                 placeholder="Enter your full name"
-                                className="outline-none mt-0.5 w-full border rounded-xl rounded-xl bg-transparent px-3 py-2"
+                                className="outline-none mt-0.5 w-full border rounded-xl bg-transparent px-3 py-2"
                                 required
                                 autoComplete="off"
                             />
@@ -277,7 +277,9 @@ const RegisterPage = () => {
                     )}
                 </form>
                 <div className="mt-6 mx-auto w-[60%] text-center">
-                    <span className="text-white/60">Already have an account?</span>
+                    <span className="text-white/60">
+                        Already have an account?
+                    </span>
                     <Link
                         className="underline ml-1 text-purple-400 hover:text-purple-500"
                         to={"/login"}

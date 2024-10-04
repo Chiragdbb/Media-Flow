@@ -1,7 +1,9 @@
-import axios from "axios";
 import { Link } from "react-router-dom";
+import useAxios from "../axios/axios";
 
 const VideoListCard = ({ video }) => {
+    const api = useAxios();
+
     // todo: check
     function formatTime(seconds) {
         const hours = Math.floor(seconds / 3600);
@@ -47,11 +49,7 @@ const VideoListCard = ({ video }) => {
 
     const addView = async () => {
         try {
-            await axios.patch(
-                `${import.meta.env.VITE_SERVER_URL}/videos/view/${video._id}`,
-                null,
-                { withCredentials: true }
-            );
+            await api.patch(`/videos/view/${video._id}`, null);
         } catch (e) {
             console.log(e);
         }

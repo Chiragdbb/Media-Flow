@@ -1,29 +1,22 @@
-import axios from "axios";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { endSession } from "../store/userSlice";
 import { useNavigate } from "react-router";
+import useAxios from "../axios/axios";
 
 const Logout = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // remove from state
+    const api = useAxios();
+
     const logout = async () => {
         try {
-            const loadToast = toast.loading("Logging out..");
+            const loadToast = toast.loading("Logging out...");
 
-            const res = await axios.post(
-                `${import.meta.env.VITE_SERVER_URL}/users/logout`,
-                null,
-                {
-                    withCredentials: true,
-                }
-            );
+            const res = await api.post(`/users/logout`, null);
+
             const data = res.data.data;
-
-            // prod remove
-            console.log(res);
 
             if (res.status === 200 && data) {
                 dispatch(endSession());
@@ -40,7 +33,10 @@ const Logout = () => {
 
     return (
         <div>
-            <button onClick={logout} className="px-4 py-2 hover:bg-gray-700 rounded-full">
+            <button
+                onClick={logout}
+                className="px-4 py-2 hover:bg-gray-700 rounded-full"
+            >
                 Logout
             </button>
         </div>

@@ -1,8 +1,10 @@
-import axios from "axios";
 import { Link } from "react-router-dom";
 import check from "../assets/check.svg";
+import useAxios from "../axios/axios";
 
 const VideoCard = ({ video }) => {
+    const api = useAxios();
+
     // : look in this
     function formatTime(seconds) {
         const hours = Math.floor(seconds / 3600);
@@ -48,11 +50,7 @@ const VideoCard = ({ video }) => {
 
     const addView = async () => {
         try {
-            await axios.patch(
-                `${import.meta.env.VITE_SERVER_URL}/videos/view/${video._id}`,
-                null,
-                { withCredentials: true }
-            );
+            await api.patch(`/videos/view/${video._id}`, null);
         } catch (e) {
             console.log(e);
         }
@@ -95,11 +93,7 @@ const VideoCard = ({ video }) => {
                         <span className="text-gray-400 text- flex justify-center items-center gap-x-1.5">
                             {video.owner.username}
                             <span className="bg-white/80 p-[2px] w-3 h-3 rounded-full flex justify-center items-center">
-                                <img
-                                    className="w-full"
-                                    src={check}
-                                    alt=""
-                                />
+                                <img className="w-full" src={check} alt="" />
                             </span>
                         </span>
                         <div className="flex gap-x-2 text-sm text-gray-400">

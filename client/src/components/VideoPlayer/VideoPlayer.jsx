@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import cloudinary from "cloudinary-video-player";
 import "cloudinary-video-player/cld-video-player.min.css";
 import "./videoPlayer.css";
+import Loader from "../Loader/Loader";
 
 // todo: video quality option
 const VideoPlayer = ({ videoId }) => {
@@ -71,8 +72,8 @@ const VideoPlayer = ({ videoId }) => {
         <div className="h-fit">
             <div id="player-container">
                 {loading ? (
-                    <div className="loading">
-                        <div>Loading...</div>
+                    <div className="h-[30rem]">
+                        <Loader />
                     </div>
                 ) : (
                     <video ref={playerRef} id="player" />

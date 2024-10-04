@@ -1,11 +1,13 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import VideoCard from "../components/VideoCard";
+import Loader from "../components/Loader/Loader";
+import useAxios from "../axios/axios";
 
 // todo pagination handling Or scrolling
 const LikedVideos = () => {
     document.title = "Liked videos - Nexus Point";
 
+    const api = useAxios()
     const [videos, setVideos] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -21,16 +23,11 @@ const LikedVideos = () => {
     // todo: change for pagination later
     const getVideos = async () => {
         try {
-            const res = await axios.get(
-                `${import.meta.env.VITE_SERVER_URL}/likes/videos`,
-                {
-                    // params,
-                    withCredentials: true,
-                }
-            );
+            const res = await api.get("/likes/videos", {
+                // params,
+            });
 
             const data = res.data.data;
-            // console.log(data);
 
             if (res.status === 200 && data) {
                 const videos = data.map((item) => {
@@ -55,11 +52,12 @@ const LikedVideos = () => {
     }, []);
 
     return (
-        <div className="w-full pb-5 px-3">
-            {/* create a screen component for loading */}
-            <div className="">
+        <div className="w-full h-full pb-5 px-3">
+            <div className="h-full">
                 {loading ? (
-                    "Loading..."
+                    <div className="h-full pb-10">
+                        <Loader />
+                    </div>
                 ) : (
                     <div className="w-full grid grid-cols-3 place-items-center gap-y-4">
                         {videos.map((video) => (

@@ -22,17 +22,3 @@
         font-size: 14px;
     }
 }
-
-.loading {
-    div {
-        background-color: rgb(229 231 235 / 0.05);
-        border-radius: 0.75rem;
-        height: 30rem;
-        width: 100%;
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 1.5rem;
-    }
-}

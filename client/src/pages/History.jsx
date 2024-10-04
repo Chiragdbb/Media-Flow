@@ -1,26 +1,21 @@
-import axios from "axios";
 import VideoCard from "../components/VideoCard";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import Loader from "../components/Loader/Loader";
+import useAxios from "../axios/axios";
 
 //todo: update history in redux
 const History = () => {
     document.title = "Watch History - Nexus Point";
-
+    const api = useAxios()
     const [loading, setLoading] = useState(true);
     const [history, setHistory] = useState([]);
 
     const getWatchHistoryData = async () => {
         try {
-            const res = await axios.get(
-                `${import.meta.env.VITE_SERVER_URL}/users/history`,
-                {
-                    withCredentials: true,
-                }
-            );
+            const res = await api.get("/users/history");
 
             const data = res.data.data;
-            // console.log(data);
 
             if (res.status === 200 && data) {
                 setHistory(data);
@@ -41,9 +36,11 @@ const History = () => {
     }, []);
 
     return (
-        <div className="">
+        <div className="h-full">
             {loading ? (
-                "Loading..."
+                <div className="h-full pb-10">
+                    <Loader />
+                </div>
             ) : (
                 <div className="w-full grid grid-cols-3 place-items-center gap-y-4">
                     {history.map((item) => (

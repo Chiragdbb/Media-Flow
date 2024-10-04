@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import axios from "axios";
 import VideoListCard from "../components/VideoListCard";
 import { useLocation } from "react-router";
+import Loader from "../components/Loader/Loader";
+import useAxios from "../axios/axios";
 
 // todo: show videos of current channel first and then rest of videos
 const VideoList = () => {
     const url = useLocation().pathname;
+    const api = useAxios();
 
     const [videos, setVideos] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -24,13 +26,9 @@ const VideoList = () => {
 
     const getVideos = async () => {
         try {
-            const res = await axios.get(
-                `${import.meta.env.VITE_SERVER_URL}/videos/all`,
-                {
-                    params,
-                    withCredentials: true,
-                }
-            );
+            const res = await api.get("/videos/all", {
+                params,
+            });
 
             const allVideos = res.data.data.docs;
 
@@ -54,13 +52,7 @@ const VideoList = () => {
 
     const addToWatchHistory = async (videoId) => {
         try {
-            await axios.patch(
-                `${import.meta.env.VITE_SERVER_URL}/users/history/add/${videoId}`,
-                null,
-                {
-                    withCredentials: true,
-                }
-            );
+            await api.patch(`/users/history/add/${videoId}`, null);
         } catch (e) {
             console.log(e);
             e.response.data.message
@@ -73,7 +65,9 @@ const VideoList = () => {
     return (
         <div className="px-2 py-2 h-full">
             {loading ? (
-                "Loading..."
+                <div className="h-1/2">
+                    <Loader />
+                </div>
             ) : (
                 <div className="grid grid-cols-1 gap-y-1">
                     {videos

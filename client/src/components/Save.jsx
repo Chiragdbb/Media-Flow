@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import save from "../assets/save.svg";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import plus from "../assets/plus.svg";
 import close from "../assets/close.svg";
 import toast from "react-hot-toast";
+import useAxios from "../axios/axios";
 
-// todo: checkbox UI 
+// todo: checkbox UI
 const Save = ({ videoId }) => {
     const userId = useSelector((state) => state.user.userData._id);
+
+    const api = useAxios();
 
     const [playlists, setPlaylists] = useState([]);
     const [createPlaylist, setCreatePlaylist] = useState(false);
@@ -22,12 +24,7 @@ const Save = ({ videoId }) => {
 
     const getPlaylists = async () => {
         try {
-            const res = await axios.get(
-                `${import.meta.env.VITE_SERVER_URL}/playlist/user/${userId}`,
-                {
-                    withCredentials: true,
-                }
-            );
+            const res = await api.get(`/playlist/user/${userId}`);
 
             const data = res.data.data;
 
@@ -47,12 +44,9 @@ const Save = ({ videoId }) => {
         try {
             const loadToast = toast.loading("Adding Video to Playlist...");
 
-            const res = await axios.patch(
-                `${import.meta.env.VITE_SERVER_URL}/playlist/add/${videoId}/${playlistId}`,
-                null,
-                {
-                    withCredentials: true,
-                }
+            const res = await api.patch(
+                `/playlist/add/${videoId}/${playlistId}`,
+                null
             );
 
             if (res.status === 200) {
@@ -72,12 +66,9 @@ const Save = ({ videoId }) => {
         try {
             const loadToast = toast.loading("Removing Video from Playlist...");
 
-            const res = await axios.patch(
-                `${import.meta.env.VITE_SERVER_URL}/playlist/remove/${videoId}/${playlistId}`,
-                null,
-                {
-                    withCredentials: true,
-                }
+            const res = await api.patch(
+                `/playlist/remove/${videoId}/${playlistId}`,
+                null
             );
 
             if (res.status === 200) {
@@ -108,13 +99,7 @@ const Save = ({ videoId }) => {
 
             // setLoading(true);
 
-            const res = await axios.post(
-                `${import.meta.env.VITE_SERVER_URL}/playlist`,
-                newPlaylist,
-                {
-                    withCredentials: true,
-                }
-            );
+            const res = await api.post("/playlist", newPlaylist);
 
             if (res.status === 200) {
                 toast.remove(loadToast);

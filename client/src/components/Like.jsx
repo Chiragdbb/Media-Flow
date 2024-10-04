@@ -1,11 +1,13 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import liked from "../assets/liked.svg";
 import like from "../assets/like.svg";
+import useAxios from "../axios/axios";
 
 const Like = ({ id, type, addClasses }) => {
     const userId = useSelector((state) => state.user.userData._id);
+
+    const api = useAxios();
 
     const [likedByUser, setLikedByUser] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
@@ -14,18 +16,14 @@ const Like = ({ id, type, addClasses }) => {
 
     const getVideoLikes = async (videoId) => {
         try {
-            const res = await axios.get(
-                `${import.meta.env.VITE_SERVER_URL}/likes/${type}/${videoId}`,
-                {
-                    withCredentials: true,
-                }
+            const res = await api.get(
+                `/likes/${type}/${videoId}`
             );
 
             const data = res.data.data;
 
             const isLiked = data.some((item) => {
-                    if (item.likedBy === userId) return true;
-                // }
+                if (item.likedBy === userId) return true;
             });
 
             if (res.status === 200 && data) {
@@ -44,12 +42,10 @@ const Like = ({ id, type, addClasses }) => {
         try {
             setTogglingLike(true);
 
-            const res = await axios.post(
-                `${import.meta.env.VITE_SERVER_URL}/likes/toggle/${type}/${id}`,
+            const res = await api.post(
+                `/likes/toggle/${type}/${id}`,
                 null,
-                {
-                    withCredentials: true,
-                }
+                
             );
 
             const data = res.data.data;

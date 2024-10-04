@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Subscribe from "./Subscribe";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import Like from "./Like";
 import Save from "./Save";
+import Loader from "./Loader/Loader";
+import useAxios from "../axios/axios";
 
 // todo: update subsribe button UI
 const VideoDetails = ({ videoId }) => {
+    const api = useAxios();
     const userId = useSelector((state) => state.user.userData._id);
 
     const [video, setVideo] = useState({});
@@ -43,12 +45,7 @@ const VideoDetails = ({ videoId }) => {
 
     const getVideoDetails = async (videoId) => {
         try {
-            const res = await axios.get(
-                `${import.meta.env.VITE_SERVER_URL}/videos/${videoId}`,
-                {
-                    withCredentials: true,
-                }
-            );
+            const res = await api.get(`/videos/${videoId}`);
             const videoData = res.data.data;
 
             if (res.status === 200 && videoData) {
@@ -69,10 +66,7 @@ const VideoDetails = ({ videoId }) => {
 
     const getChannelSubs = async (channelId) => {
         try {
-            const res = await axios.get(
-                `${import.meta.env.VITE_SERVER_URL}/subscribe/total/${channelId}`,
-                { withCredentials: true }
-            );
+            const res = await api.get(`/subscribe/total/${channelId}`);
 
             const data = res.data.data;
 
@@ -99,13 +93,15 @@ const VideoDetails = ({ videoId }) => {
     return (
         <>
             {loading ? (
-                "Loading..."
+                <div className="scale-75 text-center py-3 text-lg">
+                    <Loader />
+                </div>
             ) : (
-                <div className="w-full rounded-xl font-semibold">
+                <div className="w-full h-fit rounded-xl font-semibold">
                     <h2 className="text-xl">{video.title}</h2>
 
                     {/* channel details */}
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-end">
                         <div className="mt-4 flex items-center">
                             <div className="h-10 w-10 rounded-full overflow-hidden">
                                 <img
@@ -130,13 +126,19 @@ const VideoDetails = ({ videoId }) => {
                             </div>
                         </div>
                         <div className="flex gap-x-2 mt-1">
-                            <Like id={videoId} type={"v"} addClasses={"bg-white/10 py-2 gap-x-2 px-4 hover:bg-white/20"}/>
+                            <Like
+                                id={videoId}
+                                type={"v"}
+                                addClasses={
+                                    "bg-white/10 py-2 gap-x-2 px-4 hover:bg-white/20"
+                                }
+                            />
                             <Save videoId={videoId} />
                         </div>
                     </div>
 
                     {/* details */}
-                    <div className="bg-white/10 rounded-xl mt-4 p-3">
+                    <div className="bg-white/10 rounded-xl mt-6 p-3">
                         <div className="flex gap-x-2 text-sm font-semibold">
                             <span>
                                 {video.views}
