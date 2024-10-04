@@ -21,8 +21,8 @@ const userSlice = createSlice({
             state.userData = {};
         },
         updateSession: (state, action) => {
-            // todo: accessToken updated after updating user data?
-            // state.accessToken = action.payload.accessToken;
+            // ? accessToken updated after updating user data?
+            state.accessToken = action.payload.accessToken;
             state.userData = action.payload.userData;
         },
     },

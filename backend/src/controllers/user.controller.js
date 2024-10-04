@@ -134,13 +134,13 @@ const loginUser = asyncHandler(async (req, res) => {
     // update current user as it's fields are now invalidated
     // don't send password and refresh token
     const loggedInUser = await User.findOne(user._id).select(
-        "-password -refreshToken"
+        "-password -refreshToken -watchHistory"
     );
 
     const options = {
         httpOnly: true,
-        // TODO: change to true when in production
-        secure: false,
+        secure: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
     };
 
     return res
@@ -224,6 +224,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         const options = {
             httpOnly: true,
             secure: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000
         };
 
         return res
