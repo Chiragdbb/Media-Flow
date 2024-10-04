@@ -31,17 +31,13 @@ const router = createBrowserRouter(
             <Route
                 path="/register"
                 element={
-                    <Auth authentication={false}>
                         <RegisterPage />
-                    </Auth>
                 }
             />
             <Route
                 path="/login"
                 element={
-                    <Auth authentication={false}>
                         <LoginPage />
-                    </Auth>
                 }
             />
 
