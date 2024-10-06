@@ -3,8 +3,7 @@ import { useSelector } from "react-redux";
 import VideoCard from "../components/VideoCard";
 import toast from "react-hot-toast";
 import Loader from "../components/Loader/Loader.jsx";
-// import api from "../axios/axios.js";
-import useAxios from "../axios/axios.js";
+import useAxios from "../services/axios.js";
 
 // todo pagination handling and scoller
 const HomeFeed = () => {

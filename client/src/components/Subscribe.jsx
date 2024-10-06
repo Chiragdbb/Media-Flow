@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import sub from "../assets/subscribe.svg";
 import toast from "react-hot-toast";
-import useAxios from "../axios/axios";
+import useAxios from "../services/axios.js";
 
 const Subscribe = ({ channelId, subStatus }) => {
     const [subscribed, setSubscribed] = useState(subStatus);
     const [loading, setLoading] = useState(false);
-    const api = useAxios()
+    const api = useAxios();
 
     useEffect(() => {
         setSubscribed(subStatus);
@@ -19,10 +19,7 @@ const Subscribe = ({ channelId, subStatus }) => {
                 subscribed ? "Unsubscribing..." : "Subscribing..."
             );
 
-            const res = await api.post(
-                `/subscribe/${channelId}`,
-                null,
-            );
+            const res = await api.post(`/subscribe/${channelId}`, null);
 
             const data = res.data.data;
 
@@ -42,8 +39,8 @@ const Subscribe = ({ channelId, subStatus }) => {
         } catch (e) {
             toast.remove();
             toast.error(e.response.data.message);
-            setSubscribed(!subscribed);
-            console.log("Error while toggling subscription to channel:", error);
+            // setSubscribed(!subscribed);
+            console.log("Error while toggling subscription to channel:", e);
             console.log(`${e.response.status}: ${e.response.data.message}`);
         } finally {
             setLoading(false);

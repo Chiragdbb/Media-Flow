@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import Like from "./Like";
 import trash from "../assets/trash.svg";
-import useAxios from "../axios/axios";
+import useAxios from "../services/axios.js";
 
 // todo: pagination => change params to get next comments
 const Comments = ({ videoId }) => {

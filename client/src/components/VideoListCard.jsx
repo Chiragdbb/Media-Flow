@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import useAxios from "../axios/axios";
+import useAxios from "../services/axios.js";
 
 const VideoListCard = ({ video }) => {
     const api = useAxios();

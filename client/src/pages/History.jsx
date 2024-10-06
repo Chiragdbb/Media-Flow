@@ -2,7 +2,7 @@ import VideoCard from "../components/VideoCard";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Loader from "../components/Loader/Loader";
-import useAxios from "../axios/axios";
+import useAxios from "../services/axios.js";
 
 //todo: update history in redux
 const History = () => {

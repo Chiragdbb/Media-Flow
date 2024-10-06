@@ -7,12 +7,13 @@ import { useDispatch } from "react-redux";
 import { startSession } from "../store/userSlice";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
-import useAxios from "../axios/axios";
+import useAxios from "../services/axios.js";
 
 const LoginPage = () => {
+    document.title = "Login - Nexus Point";
     const navigate = useNavigate();
 
-    const api = useAxios();
+    const api = useAxios()
 
     const dispatch = useDispatch();
     const [formData, setFormData] = useState({
@@ -28,7 +29,10 @@ const LoginPage = () => {
             toast.remove();
             const loadToast = toast.loading("Signing in user...");
 
-            const res = await api.post(`/users/login`, formData);
+            const res = await api.post(
+                `/users/login`,
+                formData,
+            );
             const userData = res.data.data;
 
             if (res.data.statusCode === 200 && userData) {
@@ -88,11 +92,7 @@ const LoginPage = () => {
         <div className="h-screen overflow-hidden bg-dark-bg text-white flex flex-col justify-between pt-14 pb-3">
             <div>
                 <div className="mx-auto w-[15rem]">
-                    <img
-                        className="w-full aspect-square"
-                        src={logo}
-                        alt="logo"
-                    />
+                    <img className="w-full aspect-square" src={logo} alt="logo" />
                 </div>
                 <form
                     onSubmit={submitHandler}
@@ -100,17 +100,17 @@ const LoginPage = () => {
                 >
                     <label className="block text-gray-300">
                         Email / Username*
-                        <input
-                            name="email"
-                            id="email-password"
-                            type="text"
-                            value={formData.email}
-                            onChange={changeHandler}
-                            placeholder="Enter your email or username"
-                            className="outline-none mt-0.5 w-full  border rounded-xl bg-transparent px-3 py-2"
-                            required
-                            autoComplete="off"
-                        />
+                            <input
+                                name="email"
+                                id="email-password"
+                                type="text"
+                                value={formData.email}
+                                onChange={changeHandler}
+                                placeholder="Enter your email or username"
+                                className="outline-none mt-0.5 w-full  border rounded-xl bg-transparent px-3 py-2"
+                                required
+                                autoComplete="off"
+                            />
                     </label>
                     <label className="text-gray-300">
                         Password*
@@ -154,11 +154,7 @@ const LoginPage = () => {
             <div className="mx-auto flex w-full max-w-sm flex-col px-4">
                 <div className="mt-4 text-white/60 text-center">
                     <span className="text">New to the scene? </span>
-                    <Link
-                        to={"/register"}
-                        className="ml-1 underline hover:text-purple-500 text-purple-400"
-                    >
-                        Let's get you started
+                    <Link to={"/register"} className="ml-1 underline hover:text-purple-500 text-purple-400">Let's get you started
                     </Link>
                 </div>
             </div>

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import plus from "../assets/plus.svg";
 import close from "../assets/close.svg";
 import toast from "react-hot-toast";
-import useAxios from "../axios/axios";
+import useAxios from "../services/axios.js";
 
 // todo: checkbox UI
 const Save = ({ videoId }) => {

@@ -3,7 +3,8 @@ import { useSelector } from "react-redux";
 import VideoListCard from "../components/VideoListCard";
 import { useLocation } from "react-router";
 import Loader from "../components/Loader/Loader";
-import useAxios from "../axios/axios";
+import useAxios from "../services/axios.js";
+import toast from "react-hot-toast";
 
 // todo: show videos of current channel first and then rest of videos
 const VideoList = () => {

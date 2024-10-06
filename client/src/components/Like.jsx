@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import liked from "../assets/liked.svg";
 import like from "../assets/like.svg";
-import useAxios from "../axios/axios";
+import useAxios from "../services/axios.js";
 
 const Like = ({ id, type, addClasses }) => {
     const userId = useSelector((state) => state.user.userData._id);
@@ -16,9 +16,7 @@ const Like = ({ id, type, addClasses }) => {
 
     const getVideoLikes = async (videoId) => {
         try {
-            const res = await api.get(
-                `/likes/${type}/${videoId}`
-            );
+            const res = await api.get(`/likes/${type}/${videoId}`);
 
             const data = res.data.data;
 
@@ -42,11 +40,7 @@ const Like = ({ id, type, addClasses }) => {
         try {
             setTogglingLike(true);
 
-            const res = await api.post(
-                `/likes/toggle/${type}/${id}`,
-                null,
-                
-            );
+            const res = await api.post(`/likes/toggle/${type}/${id}`, null);
 
             const data = res.data.data;
 

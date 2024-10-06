@@ -10,6 +10,7 @@ import closedEye from "../assets/eye-closed.svg";
 
 // todo: check for valid email
 const RegisterPage = () => {
+    document.title = "Register - Nexus Point";
     const url = import.meta.env.VITE_SERVER_URL;
     const navigate = useNavigate();
 

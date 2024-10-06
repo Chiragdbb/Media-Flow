@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import Like from "./Like";
 import Save from "./Save";
 import Loader from "./Loader/Loader";
-import useAxios from "../axios/axios";
+import useAxios from "../services/axios.js";
 
 // todo: update subsribe button UI
 const VideoDetails = ({ videoId }) => {
@@ -55,6 +55,7 @@ const VideoDetails = ({ videoId }) => {
             }
         } catch (e) {
             console.log("Error fetching video details:", e);
+            toast.remove();
             e.response.data.message
                 ? toast.error(e.response.data.message)
                 : toast.error("Error fetching video details");

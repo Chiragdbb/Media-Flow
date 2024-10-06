@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { endSession } from "../store/userSlice";
 import { useNavigate } from "react-router";
-import useAxios from "../axios/axios";
+import useAxios from "../services/axios.js";
 
 const Logout = () => {
     const dispatch = useDispatch();
@@ -26,7 +26,7 @@ const Logout = () => {
             }
         } catch (e) {
             toast.remove();
-            toast.error("Error while logging out!!");
+            toast.error("Error while logging out!!", e.response.data.message);
             console.log(e.response);
         }
     };

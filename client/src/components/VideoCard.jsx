@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import check from "../assets/check.svg";
-import useAxios from "../axios/axios";
+import useAxios from "../services/axios.js";
 
 const VideoCard = ({ video }) => {
     const api = useAxios();

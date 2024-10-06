@@ -16,8 +16,6 @@ const router = Router();
 
 router.use(verifyJWT);
 
-// todo: remove auth form get all videos
-// other routes remain the same 
 router.route("/all").get(getAllUsersVideos);
 router.route("/").get(getAllVideos);
 router.route("/publish").post(upload.single("video"), publishVideo);

@@ -23,6 +23,7 @@ import Settings from "./pages/Settings.jsx";
 import Subscribers from "./pages/Subscribers.jsx";
 import Support from "./pages/Support.jsx";
 import Auth from "./components/Auth.jsx";
+import CollectionDetails from "./pages/CollectionDetails.jsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -56,6 +57,7 @@ const router = createBrowserRouter(
                 <Route path="/user/content" element={<MyContent />} />
                 <Route path="/user/history" element={<History />} />
                 <Route path="/user/collections" element={<Collections />} />
+                <Route path="/user/collections/:playlistId" element={<CollectionDetails />} />
                 <Route path="/user/support" element={<Support />} />
                 <Route path="/user/settings" element={<Settings />} />
             </Route>
