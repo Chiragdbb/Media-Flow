@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import useAxios from "../services/axios.js";
+import useAxios from "../services/axios";
+import check from '../assets/check.svg'
 
 const VideoListCard = ({ video }) => {
     const api = useAxios();
@@ -62,11 +63,11 @@ const VideoListCard = ({ video }) => {
         <Link
             to={`/watch/${video._id}`}
             onClick={addView}
-            className="w-fit h-fit"
+            className="w-full h-fit"
         >
-            <div className="w-full h-[7.5rem] flex p-2 gap-x-4 rounded-xl overflow-hidden hover:bg-black/60 transition-colors duration-150">
+            <div className="w-full h-[8rem] flex p-2 gap-x-4 rounded-xl overflow-hidden hover:bg-black/60 transition-colors duration-150">
                 {/* video */}
-                <div className="relative h-full w-[45%]">
+                <div className="relative h-full min-w-[14rem]">
                     <img
                         className="w-full h-full object-cover object-center rounded-xl"
                         src={video.thumbnail}
@@ -78,9 +79,12 @@ const VideoListCard = ({ video }) => {
                 </div>
                 {/* video description */}
                 <div>
-                    <h3 className="text-white/80">{video.title}</h3>
-                    <span className="text-gray-500 text-sm">
+                    <h3 className="text-white/80 -mt-1">{video.title}</h3>
+                    <span className="text-gray-400 flex items-center gap-x-1.5">
                         {video.owner.username}
+                        <span className="bg-white/80 p-[2px] w-3 h-3 rounded-full flex justify-center items-center">
+                            <img className="w-full" src={check} alt="check" />
+                        </span>
                     </span>
                     <div className="flex gap-x-2 text-sm text-gray-500 mt-1">
                         <span>

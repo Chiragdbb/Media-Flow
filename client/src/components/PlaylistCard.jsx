@@ -19,33 +19,15 @@ const PlaylistCard = ({ playlistId, totalVideos }) => {
 
             if (res.status === 200 && data) {
                 setPlaylistData(data);
-                getPlaylistThumbnail(totalVideos !== 0 ? data.videos[0] : null);
+
+                if (data.videos.length > 0) {
+                    setPlaylistThumbnail(data.videos[0].thumbnail);
+                }
             }
         } catch (e) {
             console.log(
                 `Error while fetching playlist with id ${playlistId}: ${e}`
             );
-        }
-    };
-
-    const getPlaylistThumbnail = async (videoId = 0) => {
-        try {
-            setLoading(true);
-
-            if (!videoId) {
-                setPlaylistThumbnail("");
-                return;
-            }
-
-            const res = await api(`/videos/${videoId}`);
-
-            const data = res.data.data;
-
-            if (res.status === 200 && data) {
-                setPlaylistThumbnail(data.thumbnail);
-            }
-        } catch (e) {
-            console.log("Error while fetching playlist thumbnail: ", e);
         } finally {
             setLoading(false);
         }
@@ -90,48 +72,63 @@ const PlaylistCard = ({ playlistId, totalVideos }) => {
         return secondsAgo <= 1 ? "just now" : `${secondsAgo} seconds ago`;
     }
 
+    const getTotalViews = (videos) => {
+        return videos.reduce((acc, video) => acc + video.views, 0);
+    };
+
     useEffect(() => {
         getPlaylistData();
     }, []);
 
     return (
         <div>
-            <Link to={`/user/collections/${playlistId}`} className="h-fit">
-                {/* thumbnail  */}
-                <div className="h-[12rem] w-full relative rounded-xl overflow-hidden bg-black/20">
-                    {loading ? (
-                        <div className="translate-y-10 scale-[0.7]">
-                            <Loader />
-                        </div>
-                    ) : playlistThumbnail !== "" ? (
-                        <div className="flex justify-center items-center bg-white/20">
-                            <img
-                                className="w-full h-[12rem] object-cover object-center"
-                                src={playlistThumbnail}
-                                alt="thumbnail"
-                            />
-                            <span className="absolute bottom-1 right-1 w-fit h-fit px-2 py-1 rounded-xl font-bold bg-black/40 text-xs flex justify-center items-center gap-x-1">
-                                <span>
-                                    <img className="w-4" src={playlist} alt="play" />
-                                </span>
-                                {totalVideos} videos
-                            </span>
-                        </div>
-                    ) : (
-                        <div>
-                            <div className="h-[12rem] flex justify-center items-center bg-white/10">
-                                <span className="text-xl font-bold">
-                                    No Videos
+            {loading ? (
+                <div className="translate-y-10 scale-[0.7]">
+                    <Loader />
+                </div>
+            ) : (
+                <Link to={`/user/collections/${playlistId}`} className="h-fit">
+                    {/* thumbnail  */}
+                    <div className="h-[12rem] w-full relative rounded-xl overflow-hidden bg-black/20">
+                        {playlistThumbnail !== "" ? (
+                            <div className="flex justify-center items-center bg-white/20">
+                                <img
+                                    className="w-full h-[12rem] object-cover object-center"
+                                    src={playlistThumbnail}
+                                    alt="thumbnail"
+                                />
+                                <span className="absolute bottom-1 right-1 w-fit h-fit px-2 py-1 rounded-xl font-bold bg-black/40 text-xs flex justify-center items-center gap-x-1">
+                                    <span>
+                                        <img
+                                            className="w-4"
+                                            src={playlist}
+                                            alt="play"
+                                        />
+                                    </span>
+                                    {totalVideos} videos
                                 </span>
                             </div>
-                        </div>
-                    )}
-                </div>
+                        ) : (
+                            <div>
+                                <div className="h-[12rem] flex justify-center items-center bg-white/10">
+                                    <span className="text-xl font-bold">
+                                        No Videos
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+                    </div>
 
-                {/* playlist details */}
-                <h4 className="mt-3 text-xl font-bold">{playlistData.name}</h4>
-                <p className="text-sm mt-1.5 text-white/60">{`Updated ${timeSince(playlistData.updatedAt)}`}</p>
-            </Link>
+                    {/* playlist details */}
+                    <h4 className="mt-3 text-xl font-bold">
+                        {playlistData.name}
+                    </h4>
+                    <p className="text-sm mt-1 text-white/60">
+                        {getTotalViews(playlistData.videos)} views
+                    </p>
+                    <p className="text-sm mt-0.5 text-white/60">{`Updated ${timeSince(playlistData.updatedAt)}`}</p>
+                </Link>
+            )}
         </div>
     );
 };

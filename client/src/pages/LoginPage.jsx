@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { startSession } from "../store/userSlice";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
-import useAxios from "../services/axios.js";
+import useAxios from "../services/axios";
 
 const LoginPage = () => {
     document.title = "Login - Nexus Point";

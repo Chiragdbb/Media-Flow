@@ -69,7 +69,19 @@ const getPlaylistById = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Playlist id required");
     }
 
-    const playlist = await Playlist.findById({ _id: playlistId });
+    const playlist = await Playlist.findById({ _id: playlistId })
+        .populate({
+            path: "owner",
+            select: "-password -refreshToken -watchHistory -email -coverImage",
+        })
+        .populate({
+            path: "videos",
+            populate: {
+                path: "owner",
+                select: "-password -refreshToken -watchHistory -email -coverImage -fullname",
+            },
+        })
+        .exec();
 
     if (!playlist) {
         throw new ApiError(

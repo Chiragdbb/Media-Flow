@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import Like from "./Like";
 import Save from "./Save";
 import Loader from "./Loader/Loader";
-import useAxios from "../services/axios.js";
+import useAxios from "../services/axios";
 
 // todo: update subsribe button UI
 const VideoDetails = ({ videoId }) => {

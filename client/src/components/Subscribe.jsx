@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import sub from "../assets/subscribe.svg";
 import toast from "react-hot-toast";
-import useAxios from "../services/axios.js";
+import useAxios from "../services/axios";
 
 const Subscribe = ({ channelId, subStatus }) => {
     const [subscribed, setSubscribed] = useState(subStatus);

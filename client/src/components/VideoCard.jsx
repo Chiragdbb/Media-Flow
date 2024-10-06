@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import check from "../assets/check.svg";
-import useAxios from "../services/axios.js";
+import useAxios from "../services/axios";
 
 const VideoCard = ({ video }) => {
     const api = useAxios();
@@ -90,7 +90,7 @@ const VideoCard = ({ video }) => {
                     </div>
                     <div className="flex flex-col items-start justify-center">
                         <h3 className="text-lg text-white/80">{video.title}</h3>
-                        <span className="text-gray-400 text- flex justify-center items-center gap-x-1.5">
+                        <span className="text-gray-400 flex justify-center items-center gap-x-1.5">
                             {video.owner.username}
                             <span className="bg-white/80 p-[2px] w-3 h-3 rounded-full flex justify-center items-center">
                                 <img className="w-full" src={check} alt="" />
@@ -102,7 +102,6 @@ const VideoCard = ({ video }) => {
                                 <span className="ml-1">views</span>
                             </span>
                             <span>·</span>
-                            {/* // todo: calculate created at time */}
                             <span>{timePassed}</span>
                         </div>
                     </div>

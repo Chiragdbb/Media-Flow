@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import VideoCard from "../components/VideoCard";
 import Loader from "../components/Loader/Loader";
-import useAxios from "../services/axios.js";
+import useAxios from "../services/axios";
 
 // todo pagination handling Or scrolling
 const LikedVideos = () => {

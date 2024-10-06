@@ -17,8 +17,8 @@ const WatchLayout = () => {
     const overlayHandler = () => {
         setSidebarExtended(!sidebarExtended);
 
-        // bug
-        /* !sidebarExtended
+        // bug = disable scroll bar when overlay is open
+        /* !sidebarExtended 
             ? (document.body.style.overflow = "hidden")
             : (document.body.style.overflow = "auto");
         */
@@ -27,7 +27,7 @@ const WatchLayout = () => {
     // todo: add compact sidebar
     return (
         <div className="bg-dark-bg text-white">
-            {/* overlay */}
+            {/* overlay bg*/}
             {sidebarExtended && (
                 <div
                     onClick={() => setSidebarExtended(false)}
@@ -35,10 +35,11 @@ const WatchLayout = () => {
                 ></div>
             )}
 
+            {/* overlay*/}
             <div
-                className={`fixed left-0 top-0 bottom-0 bg-dark-bg z-10 w-[14rem] flex flex-col justify-center pt-6 transition-all duration-300 ${sidebarExtended ? "translate-x-0" : "-translate-x-[15rem]"} `}
+                className={`w-[14.35rem] fixed left-0 top-0 bottom-0 bg-dark-bg z-10  flex flex-col justify-center pt-6 transition-all duration-300 ${sidebarExtended ? "translate-x-0" : "-translate-x-[15rem]"} `}
             >
-                <div className="w-fit ml-4">
+                <div className="w-fit ml-4 mb-5">
                     <button
                         onClick={overlayHandler}
                         className=" w-10 rounded-full p-1.5 hover:bg-white/10"
@@ -64,7 +65,7 @@ const WatchLayout = () => {
                 </div>
             </div>
             {/* content */}
-            <div className="min-h-[88vh] flex justify-center pl-4 pr-1">
+            <div className="min-h-[88vh] flex justify-center pl-4">
                 <div className="flex-[0.68] px-2 py-4 flex flex-col">
                     <VideoPlayer videoId={videoId} />
                     <div className="mt-4">

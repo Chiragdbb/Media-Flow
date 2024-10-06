@@ -35,16 +35,16 @@ const Collections = () => {
     }, []);
 
     return (
-        <div className="h-full w-full px-6 pt-1 pb-2">
+        <div className="min-h-full w-full px-6 pt-1 pb-4">
             <h2 className="text-4xl font-bold">Collections</h2>
             {loading ? (
                 <div className="h-4/5">
                     <Loader />
                 </div>
             ) : (
-                <div className="grid grid-cols-3 gap-x-6 gap-y-5 mt-6">
+                <div className="grid grid-cols-3 gap-x-3 gap-y-5 mt-6">
                     {playlists.map((item) => (
-                        <div key={item._id} className="p-2 hover:bg-white/20 rounded-xl transition-colors duration-150">
+                        <div key={item._id} className="p-4 hover:bg-black/40 rounded-xl transition-colors duration-150">
                             <PlaylistCard
                                 playlistId={item._id}
                                 totalVideos={item.videos.length}
